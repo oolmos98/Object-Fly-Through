@@ -18,8 +18,11 @@ class MyViewer : public WsViewer
 	SnLines* l;
 	SnPolyEditor* _polyed;
 	SnLines* _curve;
+	SnLines* _curveCam;
 	UiSlider* _slider;
 	GsArray<GsPnt> _points;
+	GsArray<GsPnt> _camPathPoints;
+	SnMaterial* shMaterial;
 	int altitude = 0;
 	float speed_r = 0.0f, offset = 0.0f;
 	bool engine_on = false, mode = false;
@@ -32,6 +35,9 @@ class MyViewer : public WsViewer
 	bool _animating;
 
 	GsVec q = GsVec(0.0f,40.0f,0.0f);
+
+	// Misc
+	SnGroup* _pointPlacement;
 
 	
    public :
@@ -55,6 +61,9 @@ class MyViewer : public WsViewer
 	void scaleBody(SnTransform* t, float s);
 	void cameraMode(int mode);
 	void computeShadow();
+
+	// misc
+	void showPoints(GsArray<GsPnt> P);
 
 	void run_animation ();
 	virtual int handle_keyboard ( const GsEvent &e ) override;

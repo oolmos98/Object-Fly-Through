@@ -1,5 +1,6 @@
 ﻿
 # include "my_viewer.h"
+#include <iostream>
 
 # include <sigogl/ui_button.h>
 # include <sigogl/ui_radio_button.h>
@@ -29,6 +30,8 @@ SnModel* boat_model[4];
 SnModel* curve;
 GsPnt position = GsPnt(0, 0, 0);
 GsArray<GsPnt> calcPoints;
+GsArray<GsPnt> camPath;		// To be used for camera pathing
+
 //Not used
 //SnGroup* sun;
 //SnModel* s;
@@ -157,6 +160,7 @@ void MyViewer::options(int c) {
 					Object: %s\t\
 					Engine: %s",m,o,e);
 }
+
 
 void MyViewer::import_models ()
 {
@@ -294,10 +298,10 @@ void MyViewer::import_models ()
 
 	//Given by the Professor
 	//This part sets the material to be placed into the shadow models
-	SnMaterial* shMaterial = new SnMaterial;
+	shMaterial = new SnMaterial;
 	GsMaterial m;
 	m.diffuse = GsColor::black;
-	shMaterial->material(m, 6);
+	shMaterial->material(m, 4);
 	shMaterial->restore(true);
 
 	shadowHeli->separator(true);
@@ -321,9 +325,11 @@ void MyViewer::import_models ()
 	rootg()->add_group(big_p);
 	rootg()->add_group(shadowHeli);
 	compute_mappings("");
-
-
 }
+
+
+
+
 void MyViewer::import_land() {
 	//Allocate memory for the land group.
 	land = new SnGroup;
@@ -528,8 +534,10 @@ static GsPnt eval_bspline(float t, int K, const GsArray<GsPnt>& P)
 void MyViewer::compute_curves() {
 	//rootg()->add(_polyed = new SnPolyEditor);
 	rootg()->add(_curve = new SnLines);
+	rootg()->add(_curveCam = new SnLines);
 	rootg()->add(curve = new SnModel);
 	_curve->color(GsColor(20, 200, 25));
+	_curveCam->color(GsColor(20, 200, 25));
 	_curve->line_width(5.0f);
 	curve->color(GsColor(20, 200, 25));
 
@@ -549,8 +557,6 @@ void MyViewer::compute_curves() {
 	_points.push() = GsPnt(40, height, 20);
 	_points.push() = GsPnt(20, height, -20);
 
-
-
 	_curve->init();
 
 	float deltat = _slider->value();
@@ -561,14 +567,53 @@ void MyViewer::compute_curves() {
 		GsPnt x = eval_bspline(t, 3, _points);
 		_curve->push(x);
 		calcPoints.push(x);
-
 	}
 	/*for (int i = 0; i < calcPoints.size();i++)
 	gsout << calcPoints[i] << gsnl;*/
 
 	_curve->end_polyline();
+	
+	/*
+		Camera Pathing
+	*/
+	_camPathPoints.push() = GsPnt(20.0f, 40.0f, 60.0f);
+	_camPathPoints.push() = GsPnt(50.0f, 35.0f, 30.0f);
+	_camPathPoints.push() = GsPnt(65.0f, 30.0f, 0.0f);
+	_camPathPoints.push() = GsPnt(50.0f, 28.0f, -30.0f);
+	_camPathPoints.push() = GsPnt(20.0f, 25.0f, -55.0f);
+	_camPathPoints.push() = GsPnt(-15.0f, 22.0f, -50.0f);
+	_camPathPoints.push() = GsPnt(-40.0f, 20.0f, -25.0f);
+	_camPathPoints.push() = GsPnt(-30.0f, 18.0f, 18.0f);
+	_camPathPoints.push() = GsPnt(0.0f, 18.0f, 35.0f);
+	_camPathPoints.push() = GsPnt(20.0f, 18.0f, 20.0f);
 
+	showPoints(_camPathPoints);
 
+	_curveCam->init();
+	_curveCam->begin_polyline();
+
+	for (float t = 2; t < _camPathPoints.size(); t += deltat) // note: the t range may change according to the curve
+	{
+		GsPnt x = eval_bspline(t, 3, _camPathPoints);
+		_curveCam->push(x);
+		camPath.push(x);
+	}
+
+	_curveCam->end_polyline();
+
+}
+
+void MyViewer::showPoints(GsArray<GsPnt> P) {
+	_pointPlacement = new SnGroup;
+	for (int i = 0; i < P.size(); i++)
+	{
+		SnModel* point = new SnModel;
+		point->model()->make_sphere(P[i], 1.0f, 50, true);
+		point->color(GsColor::red);
+		_pointPlacement->add(point);
+	}
+
+	rootg()->add(_pointPlacement);
 }
 
 
@@ -652,9 +697,12 @@ void MyViewer::cameraMode(int mode) {
 		
 	case 0: {
 		//camera().init();
-		camera().eye.y = 40;
-		camera().eye.x = 0;
-		camera().eye.z = 0;
+		//camera().init();
+		//camera().rotate(GsQuat(GsVec(0.0f, 0.0f, 0.0f), 0));
+		camera().eye.z = 40.0f;
+		camera().eye.y = 40.0f;
+		camera().up.z = -2.0f;
+		camera().up.y = 2.0f;
 		//camera().up.y = 100;
 		//camera().fovy = GS_TORAD(60);
 		//camera().aspect = 2;
@@ -665,11 +713,12 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 1: {
-		if (camera().eye.y == 40) {
+		//if (camera().eye.y == 40) {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
-			double frdt = 1.0 / 60.0; //frames
-
+			double frdt = 1.0 / 30.0; //frames
+			int index = 0;
+			camera().init();
 			do
 			{
 				while (t - lt < frdt) { ws_check(); t = gs_time() - t0; }
@@ -677,33 +726,36 @@ void MyViewer::cameraMode(int mode) {
 				lt = gs_time() - t0;
 
 				if (engine_on) {
-					rotateX(baxis, -angle);
-					rotateX(saxis, -angle);
+					rotateX(baxis, angle);
+					rotateX(saxis, angle);
 				}
-				if (lt < 3.0f) {
-					/*camera().eye.x += 0.001f;
-					camera().center.x   += 0.001f;
-					camera().up.x += 0.001f;*/
-					camera().rotate(rot);
-				}
-				if (lt > 3.0f) {
-					/*camera().eye.y -= 0.001f;
-					camera().center.y += 0.001f;
-					camera().up.y += 0.001f;*/
-					camera().rotate(rot1);
+				//if (lt < 1.0f) {
+				//	/*camera().eye.x += 0.001f;
+				//	camera().center.x   += 0.001f;
+				//	camera().up.x += 0.001f;*/
+				//	camera().rotate(rot);
+				//}
+				//if (lt > 1.0f) {
+				//	/*camera().eye.y -= 0.001f;
+				//	camera().center.y += 0.001f;
+				//	camera().up.y += 0.001f;*/
+				//	camera().rotate(rot1);
+				//}
 
+				if (index < camPath.size()) {
+					camera().eye = camPath[index];
+					camera().center;
+					camera().fovy;
 				}
+
 				
-
-
+				index++;
 				message().setf("local time = % f", lt);
 				render();
 				ws_check();
-
-			
-			} while (lt < 8.0f);
-		}
-		else cameraMode(cMode = 0);
+			} while (lt < 30.0f);
+	//	}
+		//else cameraMode(cMode = 0);
 		break;
 	}
 	}
@@ -802,7 +854,6 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 	if (ret) return ret;
 	GsMat rot;
 	int menu = 0;
-
 	//will determine how fast each interaction is. Lower is bigger.
 	switch (e.key)
 	{
