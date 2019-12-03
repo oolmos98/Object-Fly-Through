@@ -8,6 +8,7 @@
 # include <sigogl/ui_check_button.h>
 # include <sigogl/ui_slider.h>
 # include <sigogl/ws_viewer.h>
+# include "Plane.h"
 
 // Viewer for this example:
 class MyViewer : public WsViewer
@@ -19,9 +20,11 @@ class MyViewer : public WsViewer
 	SnPolyEditor* _polyed;
 	SnLines* _curve;
 	SnLines* _curveCam;
+	SnLines* _curvePlane;
 	UiSlider* _slider;
 	GsArray<GsPnt> _points;
 	GsArray<GsPnt> _camPathPoints;
+	GsArray<GsPnt> _planePathPoints;
 	SnMaterial* shMaterial;
 	int altitude = 0;
 	float speed_r = 0.0f, offset = 0.0f;
@@ -38,6 +41,12 @@ class MyViewer : public WsViewer
 
 	// Misc
 	SnGroup* _pointPlacement;
+
+	int i_global = 0;
+
+
+	// Jeff's Plane
+	Plane* mahPlane;
 
 	
    public :

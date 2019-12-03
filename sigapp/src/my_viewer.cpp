@@ -31,6 +31,7 @@ SnModel* curve;
 GsPnt position = GsPnt(0, 0, 0);
 GsArray<GsPnt> calcPoints;
 GsArray<GsPnt> camPath;		// To be used for camera pathing
+GsArray<GsPnt> planePath;
 
 //Not used
 //SnGroup* sun;
@@ -182,6 +183,12 @@ void MyViewer::import_models ()
 	for (int i = 0; i < 7; i++) {
 		harrier[i] = new SnModel();
 	}
+
+	// Jeff's Plane
+	mahPlane = new Plane();
+	mahPlane->setScaling(0.35f);
+	mahPlane->set_position(GsVec(65.0f*cosf(0), 20.0f, 65.0f * sinf(0)));
+	rootg()->add_group(mahPlane->model(), true);
 	
 	//Building HelicopterPads and making sure its positioned correctly before any transformations
 	build_pad();
@@ -535,11 +542,17 @@ void MyViewer::compute_curves() {
 	//rootg()->add(_polyed = new SnPolyEditor);
 	rootg()->add(_curve = new SnLines);
 	rootg()->add(_curveCam = new SnLines);
-	rootg()->add(curve = new SnModel);
+	rootg()->add(_curvePlane = new SnLines);
 	_curve->color(GsColor(20, 200, 25));
-	_curveCam->color(GsColor(20, 200, 25));
 	_curve->line_width(5.0f);
-	curve->color(GsColor(20, 200, 25));
+
+	_curveCam->line_width(5.0f);
+	_curveCam->color(GsColor(20, 200, 25));
+
+	_curvePlane->line_width(5.0f);
+	_curvePlane->color(GsColor::lightblue);
+
+
 
 	/*_polyed->callback(my_polyed_callback, this);
 	_polyed->max_polygons(1);
@@ -587,8 +600,6 @@ void MyViewer::compute_curves() {
 	_camPathPoints.push() = GsPnt(0.0f, 18.0f, 35.0f);
 	_camPathPoints.push() = GsPnt(20.0f, 18.0f, 20.0f);
 
-	showPoints(_camPathPoints);
-
 	_curveCam->init();
 	_curveCam->begin_polyline();
 
@@ -601,6 +612,29 @@ void MyViewer::compute_curves() {
 
 	_curveCam->end_polyline();
 
+
+	/*
+		Plane Path
+	*/
+	float radius = 65.0f;
+	for (float theta = gs2pi + (2 * (gs2pi / 30)); theta >= 0; theta -= gs2pi / 30) {
+		_planePathPoints.push() = GsPnt(radius * cosf(theta), 20.0f, radius * sinf(theta));
+	}
+
+
+	//showPoints(_planePathPoints);
+
+	_curvePlane->init();
+	_curvePlane->begin_polyline();
+
+	for (float t = 2; t < _planePathPoints.size(); t += deltat) // note: the t range may change according to the curve
+	{
+		GsPnt x = eval_bspline(t, 3, _planePathPoints);
+		_curvePlane->push(x);
+		planePath.push(x);
+	}
+
+	_curvePlane->end_polyline();
 }
 
 void MyViewer::showPoints(GsArray<GsPnt> P) {
@@ -704,7 +738,8 @@ void MyViewer::cameraMode(int mode) {
 		camera().up.z = -2.0f;
 		camera().up.y = 2.0f;
 		//camera().up.y = 100;
-		//camera().fovy = GS_TORAD(60);
+		camera().center;
+		camera().fovy = GS_TORAD(60);
 		//camera().aspect = 2;
 		//camera().zfar = 1000;
 		//camera().translate();
@@ -745,7 +780,7 @@ void MyViewer::cameraMode(int mode) {
 				if (index < camPath.size()) {
 					camera().eye = camPath[index];
 					camera().center;
-					camera().fovy;
+					camera().fovy=GS_TORAD(30);
 				}
 
 				
@@ -785,60 +820,76 @@ void MyViewer::run_animation ()
 {
 	output("ANIMATING!");
 	//cameraMode(mode);
-	GsMat tr, rot;
+	GsMat tr, rot, sca;
 	double time = 0, lt = 0, t0 = gs_time();
 	double frdt = 1.0 / 30; //frames
-	int i = 0;
+	
 	//rot.roty(gspi/30);
 	do
 	{
 		while (time - lt < frdt) { ws_check(); time = gs_time() - t0; }
 
-		lt = gs_time() - t0;
+		lt = gs_time() - t0;		
 
-		if (engine_on) {
-			rotateX(baxis, -angle);
-			rotateX(saxis, -angle);
+		rotateX(baxis, -angle);
+		rotateX(saxis, -angle);
+		int i = i_global;
+		if (i < calcPoints.size() - 1) {
+			float x, y, z;
+			
+			/*x = calcPoints[i].x - position.x;
+			y = calcPoints[i].y - position.y;
+			z = calcPoints[i].z - position.z;*/
+
+			x = calcPoints[i + 1].x;
+			y = calcPoints[i + 1].y;
+			z = calcPoints[i + 1].z;
+			//gsout << calcPoints[i + 1].y - calcPoints[i-2].y << gsnl;// " " << y << " " << z << gsnl;
+
+			//tr.translation(-x, y, -z);
+			//translate(t, -x, y, -z);
+			//t->get().setrans(GsVec(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z));
+			/*if (calcPoints[i + 1].x - calcPoints[i].x > 0.0f)
+				rot.roty(gspi / 40);
+			if (calcPoints[i + 1].x - calcPoints[i].x < 0.0f)
+				rot.roty(-gspi / 40);
+			else
+				rot.roty(0);*/
+
+			float angle = atan2(x - calcPoints[i].x, z - calcPoints[i].z);
+			tr.translation(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z);
+			sca.scaling(0.15f);
+
+			rot.roty(angle);
+			t->get() = tr * rot * tr.inverse() * tr * sca;
+			//t->get().mult(t->get(),tr);
+			//if(offset<10.0f)
+			offset += calcPoints[i + 1].y - calcPoints[i].y;
 		}
-
-		float x, y, z;
-		/*x = calcPoints[i].x - position.x;
-		y = calcPoints[i].y - position.y;
-		z = calcPoints[i].z - position.z;*/
-		position.x = calcPoints[i].x;
-		position.y = calcPoints[i].y;
-		position.z = calcPoints[i].z;
-
-		x = calcPoints[i + 1].x;
-		y = calcPoints[i + 1].y;
-		z = calcPoints[i + 1].z ;
-		//gsout << calcPoints[i + 1].y - calcPoints[i-2].y << gsnl;// " " << y << " " << z << gsnl;
-
-		tr.translation(-x, y, -z);
-		//translate(t, -x, y, -z);
-		t->get().setrans(GsVec(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z));
-		if (calcPoints[i + 1].x - calcPoints[i].x > 0.0f)
-			rot.roty(gspi / 40);
-		if (calcPoints[i + 1].x - calcPoints[i].x < 0.0f)
-			rot.roty(-gspi / 40);
-		else
-			rot.roty(0);
-
-		t->get().mult(t->get(), rot);
-		//t->get().mult(t->get(),tr);
-		//if(offset<10.0f)
-		offset += calcPoints[i + 1].y - calcPoints[i].y;
 
 		//t->get().setr
 
+		mahPlane->run_animation((float)lt);
+
+		if (i < planePath.size() - 1) {
+			GsPnt nextPnt = planePath[i + 1];
+			GsPnt currPnt = planePath[i];
+
+			float angle = atan2(planePath[i].x-planePath[i + 1].x, planePath[i].z - planePath[i+1].z );
+
+			mahPlane->set_position(planePath[i]);
+			mahPlane->setrotY(angle);
+		}
+
 		//gsout << offset << gsnl;
-		i++;
+		i_global++;
+
 
 		computeShadow();
 		render();
 		//ws_check();
 
-	} while (i < calcPoints.size());
+	} while (_animating);
 
 		
 
@@ -855,6 +906,7 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 	GsMat rot;
 	int menu = 0;
 	//will determine how fast each interaction is. Lower is bigger.
+	mahPlane->handle_keyboard(e);
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); break;
@@ -1042,7 +1094,7 @@ int MyViewer::uievent ( int e )
 {
 	switch ( e )
 	{
-	case EvAnimate: _animating = true; 
+	case EvAnimate: _animating = !_animating;
 		//run_propellors(engine_on);
 		run_animation(); options(0); return 1;
 
