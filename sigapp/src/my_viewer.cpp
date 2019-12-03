@@ -569,6 +569,11 @@ void MyViewer::compute_curves() {
 	_points.push() = GsPnt(40, height, 35);
 	_points.push() = GsPnt(40, height, 20);
 	_points.push() = GsPnt(20, height, -20);
+	_points.push() = GsPnt(15, height, -20);
+	_points.push() = GsPnt(10, height, -20);
+	_points.push() = GsPnt(10, height, -25);
+	_points.push() = GsPnt(-10, height, -10);
+	_points.push() = GsPnt(-50, height, 40);
 
 	_curve->init();
 
@@ -747,53 +752,51 @@ void MyViewer::cameraMode(int mode) {
 		ws_check();
 		break;
 	}
-	case 1: {
+	case 3: {
 		//if (camera().eye.y == 40) {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
 			double frdt = 1.0 / 30.0; //frames
 			int index = 0;
 			camera().init();
-			do
-			{
-				while (t - lt < frdt) { ws_check(); t = gs_time() - t0; }
+			if (cMode == 1) {
 
-				lt = gs_time() - t0;
+				do
+				{
+					while (t - lt < frdt) { ws_check(); t = gs_time() - t0; }
 
-				if (engine_on) {
-					rotateX(baxis, angle);
-					rotateX(saxis, angle);
-				}
-				//if (lt < 1.0f) {
-				//	/*camera().eye.x += 0.001f;
-				//	camera().center.x   += 0.001f;
-				//	camera().up.x += 0.001f;*/
-				//	camera().rotate(rot);
-				//}
-				//if (lt > 1.0f) {
-				//	/*camera().eye.y -= 0.001f;
-				//	camera().center.y += 0.001f;
-				//	camera().up.y += 0.001f;*/
-				//	camera().rotate(rot1);
-				//}
+					lt = gs_time() - t0;
 
-				if (index < camPath.size()) {
-					camera().eye = camPath[index];
-					camera().center;
-					camera().fovy=GS_TORAD(30);
-				}
+					if (engine_on) {
+						rotateX(baxis, angle);
+						rotateX(saxis, angle);
+					}
+					if (index < camPath.size()) {
+						camera().eye = camPath[index];
+						camera().center;
+						camera().fovy = GS_TORAD(30);
+					}
 
-				
-				index++;
-				message().setf("local time = % f", lt);
-				render();
-				ws_check();
-			} while (lt < 30.0f);
+
+					index++;
+					message().setf("local time = % f", lt);
+					render();
+					ws_check();
+				} while (cMode == 1);
+			}
 	//	}
 		//else cameraMode(cMode = 0);
 		break;
 	}
+	case 2: {
+		camera().eye = calcPoints[i_global]+GsPnt(-1,17,-20);
+		camera().center = calcPoints[i_global];
+		camera().fovy = GS_TORAD(60);
+		//render();
+		break;
 	}
+	}
+
 	
 }
 
@@ -823,17 +826,21 @@ void MyViewer::run_animation ()
 	GsMat tr, rot, sca;
 	double time = 0, lt = 0, t0 = gs_time();
 	double frdt = 1.0 / 30; //frames
-	
+	int i = i_global;
+
 	//rot.roty(gspi/30);
 	do
 	{
 		while (time - lt < frdt) { ws_check(); time = gs_time() - t0; }
 
 		lt = gs_time() - t0;		
-
+		
 		rotateX(baxis, -angle);
 		rotateX(saxis, -angle);
-		int i = i_global;
+		i = i_global;
+		if (cMode == 3 && i < calcPoints.size()) {
+			cameraMode(cMode - 1);
+		}
 		if (i < calcPoints.size() - 1) {
 			float x, y, z;
 			
@@ -869,7 +876,7 @@ void MyViewer::run_animation ()
 
 		//t->get().setr
 
-		mahPlane->run_animation((float)lt);
+		mahPlane->run_animation(float(lt));
 
 		if (i < planePath.size() - 1) {
 			GsPnt nextPnt = planePath[i + 1];
@@ -1062,9 +1069,12 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		break;
 
 	case ' ': {
+		if (cMode == 3) cMode = 0;
+		//gsout << cMode << gsnl;
 		cameraMode(cMode);
-		if (cMode == 0) cMode = 1;
-		else cMode = 0;
+		if (cMode < 3)
+			cMode++;
+
 		options(5);
 		break;
 	}
