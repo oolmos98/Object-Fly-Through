@@ -9,6 +9,7 @@
 # include <sigogl/ui_slider.h>
 # include <sigogl/ws_viewer.h>
 # include "Plane.h"
+# include "RepublicCarrier.h"
 
 // Viewer for this example:
 class MyViewer : public WsViewer
@@ -21,16 +22,20 @@ class MyViewer : public WsViewer
 	SnLines* _curve;
 	SnLines* _curveCam;
 	SnLines* _curvePlane;
+	SnLines* _curveRepublic;
+
 	UiSlider* _slider;
 	GsArray<GsPnt> _points;
 	GsArray<GsPnt> _camPathPoints;
 	GsArray<GsPnt> _planePathPoints;
+	GsArray<GsPnt> _republicPathPoints;
+
 	SnMaterial* shMaterial;
 	int altitude = 0;
 	float speed_r = 0.0f, offset = 0.0f;
 	bool engine_on = false, mode = false;
 	int object = 0;//0 = Heli, 1 = Carrier, 2 = Both only if landed. 
-	float angle = gspi / 20;
+	float angle = gspi / 10;
 	int cMode = 0;
 
 	enum MenuEv { EvNormals, EvAnimate, EvDeltaT, EvExit };
@@ -48,7 +53,8 @@ class MyViewer : public WsViewer
 	// Jeff's Plane
 	Plane* mahPlane;
 
-	
+	RepublicCarrier* Venator;
+
    public :
 	MyViewer ( int x, int y, int w, int h, const char* l );
 	void build_ui();

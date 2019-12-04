@@ -32,6 +32,7 @@ GsPnt position = GsPnt(0, 0, 0);
 GsArray<GsPnt> calcPoints;
 GsArray<GsPnt> camPath;		// To be used for camera pathing
 GsArray<GsPnt> planePath;
+GsArray<GsPnt> republicPath;
 
 //Not used
 //SnGroup* sun;
@@ -190,6 +191,12 @@ void MyViewer::import_models ()
 	mahPlane->set_position(GsVec(65.0f*cosf(0), 20.0f, 65.0f * sinf(0)));
 	rootg()->add_group(mahPlane->model(), true);
 	
+	Venator = new RepublicCarrier();
+	Venator->setScaling(1.5f);
+	//Venator->setrotY(gspi);
+	Venator->set_position(GsVec(65.0f, 40, -30.0f));
+	rootg()->add_group(Venator->model(), true);
+
 	//Building HelicopterPads and making sure its positioned correctly before any transformations
 	build_pad();
 	float height = 5.6f;
@@ -543,16 +550,20 @@ void MyViewer::compute_curves() {
 	rootg()->add(_curve = new SnLines);
 	rootg()->add(_curveCam = new SnLines);
 	rootg()->add(_curvePlane = new SnLines);
-	_curve->color(GsColor(20, 200, 25));
-	_curve->line_width(5.0f);
+	rootg()->add(_curveRepublic = new SnLines);
 
-	_curveCam->line_width(5.0f);
+	_curve->color(GsColor(20, 200, 25));
+	_curve->line_width(3.0f);
+
+	_curveCam->line_width(3.0f);
 	_curveCam->color(GsColor(20, 200, 25));
 
-	_curvePlane->line_width(5.0f);
+	_curvePlane->line_width(3.0f);
 	_curvePlane->color(GsColor::lightblue);
 
-
+	_curveRepublic->line_width(3.0f);
+	_curveRepublic->color(GsColor::red);
+	
 
 	/*_polyed->callback(my_polyed_callback, this);
 	_polyed->max_polygons(1);
@@ -624,22 +635,31 @@ void MyViewer::compute_curves() {
 	float radius = 65.0f;
 	for (float theta = gs2pi + (2 * (gs2pi / 30)); theta >= 0; theta -= gs2pi / 30) {
 		_planePathPoints.push() = GsPnt(radius * cosf(theta), 20.0f, radius * sinf(theta));
+		_republicPathPoints.push() = GsPnt(radius * cosf(theta), 40.0f, radius * sinf(theta));
+
 	}
 
 
 	//showPoints(_planePathPoints);
 
 	_curvePlane->init();
+	_curveRepublic->init();
 	_curvePlane->begin_polyline();
-
+	_curveRepublic->begin_polyline();
 	for (float t = 2; t < _planePathPoints.size(); t += deltat) // note: the t range may change according to the curve
 	{
 		GsPnt x = eval_bspline(t, 3, _planePathPoints);
 		_curvePlane->push(x);
 		planePath.push(x);
+		x = eval_bspline(t, 3, _republicPathPoints);
+		_curveRepublic->push(x);
+		republicPath.push(x);
+	
 	}
 
 	_curvePlane->end_polyline();
+	_curveRepublic->end_polyline();
+
 }
 
 void MyViewer::showPoints(GsArray<GsPnt> P) {
@@ -887,7 +907,15 @@ void MyViewer::run_animation ()
 			mahPlane->set_position(planePath[i]);
 			mahPlane->setrotY(angle);
 		}
+		if (i < republicPath.size() - 1) {
+			GsPnt nextPnt = republicPath[i + 1];
+			GsPnt currPnt = republicPath[i];
 
+			float angle = atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
+
+			Venator->set_position(republicPath[i]);
+			mahPlane->setrotY(angle);
+		}
 		//gsout << offset << gsnl;
 		i_global++;
 
