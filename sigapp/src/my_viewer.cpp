@@ -809,7 +809,7 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 2: {
-		camera().eye = calcPoints[i_global]+GsPnt(-1,17,-20);
+		camera().eye = calcPoints[i_global]+GsPnt(1,15,-18);
 		camera().center = calcPoints[i_global];
 		camera().fovy = GS_TORAD(60);
 		//render();
@@ -911,7 +911,7 @@ void MyViewer::run_animation ()
 			GsPnt nextPnt = republicPath[i + 1];
 			GsPnt currPnt = republicPath[i];
 
-			float angle = atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
+			float angle = -atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
 
 			Venator->set_position(republicPath[i]);
 			mahPlane->setrotY(angle);
