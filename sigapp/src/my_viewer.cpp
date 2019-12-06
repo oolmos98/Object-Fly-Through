@@ -387,11 +387,7 @@ void MyViewer::import_land() {
 	land->add(_land[1] = new SnTransform);
 	land->add(land_models[1]);
 
-	
-	
-	
 	rootg()->add_group(boats);
-
 	rootg()->add_group(land);
 }
 void MyViewer::align_models() {
@@ -426,7 +422,6 @@ void MyViewer::align_models() {
 	sc.scaling(0.03f);
 	rot.rotx(gspi);
 
-	//_land[0]->get().mult(_land[0]->get(), sc * rot);
 	sc.scaling(0.008f);
 	trans.translation(GsVec(0, -5, 0));
 	_land[1]->get().mult(_land[1]->get(), trans*rot);
@@ -439,7 +434,6 @@ void MyViewer::compute_mappings(char* file) {
 		////Code Provided by the Professor in the PA5 Pdf.
 		GsModel& m = *harrier[i]->model();
 		//To reuse G to recompute texture.
-
 		m.G.init();
 		GsModel::Group& g = *m.G.push();
 		g.fi = 0;
@@ -455,26 +449,7 @@ void MyViewer::compute_mappings(char* file) {
 
 		m.set_mode(GsModel::Hybrid, GsModel::PerGroupMtl);
 		m.textured = true;
-		//render();
 	}
-	//for (int i = 0; i < 1; i++) {
-	//	//Code Provided by the Professor in the PA5 Pdf.
-		//GsModel& m = *land_models[1]->model();
-
-		//m.G.init();
-		/*GsModel::Group& g = *m.G.push();
-		g.fi = 0;
-		g.fn = m.F.size();*/
-		//g.mtlname.set("../model/land3.mtl");
-		//g.dmap = new GsModel::Texture;
-		//g.dmap->fname.set("../model/.mtl");
-		//m.M.push().init();
-		//m.M.top() = GsMaterial::DefaultAmbient;
-
-		//m.set_mode(GsModel::Faces, GsModel::PerGroupMtl);
-//		//render();
-	//}
-		//land_models[1]->model()->textured = true;
 
 }
 
@@ -540,13 +515,11 @@ static GsPnt eval_bspline(float t, int K, const GsArray<GsPnt>& P)
 	GsPnt point;
 	for (int i = 0; i < P.size(); i++)
 	{
-		//gsout << N(i, K, t) << gsnl;
 		point += (P[i] * N(i, K, t));
 	}
 	return point;
 }
 void MyViewer::compute_curves() {
-	//rootg()->add(_polyed = new SnPolyEditor);
 	rootg()->add(_curve = new SnLines);
 	rootg()->add(_curveCam = new SnLines);
 	rootg()->add(_curvePlane = new SnLines);
@@ -565,13 +538,6 @@ void MyViewer::compute_curves() {
 	_curveRepublic->color(GsColor::red);
 	
 
-	/*_polyed->callback(my_polyed_callback, this);
-	_polyed->max_polygons(1);
-	_polyed->solid_drawing(0);*/
-	//GsPolygon& P = _polyed->polygons()->push();
-	//P.setpoly("-2 -2  -1 1  1 0  2 -2");
-	//P.push()=GsP
-	//P.open(true);
 	float height = 3.5f;
 	_points.push() = position;
 	_points.push() = position;
@@ -656,7 +622,6 @@ void MyViewer::compute_curves() {
 		republicPath.push(x);
 	
 	}
-
 	_curvePlane->end_polyline();
 	_curveRepublic->end_polyline();
 
@@ -671,7 +636,6 @@ void MyViewer::showPoints(GsArray<GsPnt> P) {
 		point->color(GsColor::red);
 		_pointPlacement->add(point);
 	}
-
 	rootg()->add(_pointPlacement);
 }
 
@@ -711,14 +675,12 @@ void MyViewer::translateZ(SnTransform* t, float z) {
 	GsMat& mat = t->get(), tr;
 	tr.translation(GsVec(0, 0, z));
 	mat.mult(mat, tr);
-	//position = GsPnt(position.x, position.y, position.z + z);
 
 }
 void MyViewer::translate(SnTransform* t,float x, float y, float z) {
 	GsMat& mat = t->get(), tr;
 	tr.translation(GsVec(x, y, z));
 	mat.mult(mat, tr);
-	//position = GsPnt(position.x + x, position.y+y, position.z+z);
 
 }
 void MyViewer::rotateX(SnTransform* t, float r){
@@ -745,35 +707,26 @@ void MyViewer::scaleBody(SnTransform* t, float s){
 
 void MyViewer::cameraMode(int mode) {
 	GsMat tr, rot,rot1, rot2;
-	//tr.translation(GsVec(0, 20, 0));
 	rot.rotx(gspi / 227);
 	rot1.roty(gspi / 365);
 	rot2.rotz(gspi / 2);
-	//rotationx.rotz(gspi/40);
-
-	//rot.mult(tr, rot);
+	
 	switch (mode) {
 		
 	case 0: {
-		//camera().init();
-		//camera().init();
-		//camera().rotate(GsQuat(GsVec(0.0f, 0.0f, 0.0f), 0));
+		
 		camera().eye.z = 40.0f;
 		camera().eye.y = 40.0f;
 		camera().up.z = -2.0f;
 		camera().up.y = 2.0f;
-		//camera().up.y = 100;
 		camera().center;
 		camera().fovy = GS_TORAD(60);
-		//camera().aspect = 2;
-		//camera().zfar = 1000;
-		//camera().translate();
+	
 		render();
 		ws_check();
 		break;
 	}
 	case 3: {
-		//if (camera().eye.y == 40) {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
 			double frdt = 1.0 / 30.0; //frames
@@ -804,15 +757,13 @@ void MyViewer::cameraMode(int mode) {
 					ws_check();
 				} while (cMode == 1);
 			}
-	//	}
-		//else cameraMode(cMode = 0);
+	
 		break;
 	}
 	case 2: {
 		camera().eye = calcPoints[i_global]+GsPnt(1,15,-18);
 		camera().center = calcPoints[i_global];
 		camera().fovy = GS_TORAD(60);
-		//render();
 		break;
 	}
 	}
@@ -832,11 +783,7 @@ void MyViewer::computeShadow() {
 
 	GsMat tr;
 	tr.translation(GsVec(0, -offset+0.2f, 0));
-	//tr.setrans(0, 0, 0);
 	sH->get().mult(tr, s);
-	
-	
-	
 }
 
 void MyViewer::run_animation ()
@@ -857,31 +804,18 @@ void MyViewer::run_animation ()
 		
 		rotateX(baxis, -angle);
 		rotateX(saxis, -angle);
+
 		i = i_global;
+
 		if (cMode == 3 && i < calcPoints.size()) {
 			cameraMode(cMode - 1);
 		}
 		if (i < calcPoints.size() - 1) {
 			float x, y, z;
-			
-			/*x = calcPoints[i].x - position.x;
-			y = calcPoints[i].y - position.y;
-			z = calcPoints[i].z - position.z;*/
-
+		
 			x = calcPoints[i + 1].x;
 			y = calcPoints[i + 1].y;
 			z = calcPoints[i + 1].z;
-			//gsout << calcPoints[i + 1].y - calcPoints[i-2].y << gsnl;// " " << y << " " << z << gsnl;
-
-			//tr.translation(-x, y, -z);
-			//translate(t, -x, y, -z);
-			//t->get().setrans(GsVec(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z));
-			/*if (calcPoints[i + 1].x - calcPoints[i].x > 0.0f)
-				rot.roty(gspi / 40);
-			if (calcPoints[i + 1].x - calcPoints[i].x < 0.0f)
-				rot.roty(-gspi / 40);
-			else
-				rot.roty(0);*/
 
 			float angle = atan2(x - calcPoints[i].x, z - calcPoints[i].z);
 			tr.translation(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z);
@@ -889,12 +823,9 @@ void MyViewer::run_animation ()
 
 			rot.roty(angle);
 			t->get() = tr * rot * tr.inverse() * tr * sca;
-			//t->get().mult(t->get(),tr);
-			//if(offset<10.0f)
+			
 			offset += calcPoints[i + 1].y - calcPoints[i].y;
 		}
-
-		//t->get().setr
 
 		mahPlane->run_animation(float(lt));
 
@@ -911,22 +842,18 @@ void MyViewer::run_animation ()
 			GsPnt nextPnt = republicPath[i + 1];
 			GsPnt currPnt = republicPath[i];
 
-			float angle = -atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
+			float angle = atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
 
 			Venator->set_position(republicPath[i]);
-			mahPlane->setrotY(angle);
+			Venator->setrotY(angle);
 		}
-		//gsout << offset << gsnl;
 		i_global++;
 
 
 		computeShadow();
 		render();
-		//ws_check();
 
 	} while (_animating);
-
-		
 
 	_animating = false;
 	options(-1);

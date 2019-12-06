@@ -16,59 +16,23 @@ protected:
 	*/
 	SnModel* plane;
 	SnGroup* planeBody, * flapsGroup;
-
-	/*
-		Propeller model
-	*/
 	
 	// Whole Scene Transform
 	SnTransform* sceneTransform;
 
-	/*
-		Flaps Model
-	*/
-	
-
-	/*
-		Elevators Model
-	*/
-	
-
-	/*
-		Plane Rudders
-	*/
-	
-	/*
-		Temporary models/group for getting points for my GsQuat
-	*/
-	
-	/*
-		Material models
-	*/
-	
-
-	// Limiters for the transforms
-	
-	/*
-		Shadow model group
-			- 2 models are copied
-			- Rest of the models are shared
-	*/
 	
 
 	// Light source for the shadow.
 	GsVec p = GsVec(0.0f, 15.5f, 5.0f);
 
-	// Shadow position no longer used
-	//GsVec shadowPos = GsVec(0.0f, -8.9f, 0.0f);
 
-	// Projection shadow matrix, position is set to -8.9f to make it touch the floor
-	GsMat shadowMat = GsMat(
-		1.0f, -p.x / p.y, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, -8.9f,
-		0.0f, -p.z / p.y, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	);
+	//// Projection shadow matrix, position is set to -8.9f to make it touch the floor
+	//GsMat shadowMat = GsMat(
+	//	1.0f, -p.x / p.y, 0.0f, 0.0f,
+	//	0.0f, 0.0f, 0.0f, -8.9f,
+	//	0.0f, -p.z / p.y, 1.0f, 0.0f,
+	//	0.0f, 0.0f, 0.0f, 1.0f
+	//);
 
 	/*
 		Camera
@@ -110,7 +74,6 @@ public:
 
 	void setScaling(float sca);
 	void run_animation(float time);
-	//void updateShadows(GsVec shadowPos, GsMat trans, GsMat shadowMat, GsMat rot);
 	int handle_keyboard(const GsEvent& e);
 };
 

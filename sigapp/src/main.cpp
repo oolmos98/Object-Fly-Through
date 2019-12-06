@@ -6,8 +6,8 @@
 
 int main ( int argc, char** argv )
 {
-	MyViewer* v = new MyViewer ( -1, -1, 900, 600, "Helicopter Project" );
-	v->cmd ( WsViewer::VCmdAxis);
+	MyViewer* v = new MyViewer ( -1, -1, 900, 600, "Object Fly-Through Project" );
+	v->cmd ( WsViewer::VCmdDefault);
 	v->background(GsColor(167, 171, 99));
 
 	v->view_all();
