@@ -27,12 +27,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\bomb.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\my_viewer.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RepublicCarrier.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\bomb.h" />
     <ClInclude Include="..\src\my_viewer.h" />
     <ClInclude Include="..\src\Plane.h" />
     <ClInclude Include="..\src\RepublicCarrier.h" />
