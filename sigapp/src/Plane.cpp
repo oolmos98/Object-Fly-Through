@@ -245,16 +245,16 @@ void Plane::import_model() {
 }
 
 void Plane::run_animation(float time) {
-	if (_animating) { // do nothing if animating is not enabled
+	//if (_animating) { // do nothing if animating is not enabled
 
 		GsVec origin = GsVec(0.0f, 1.0f, 1.0f);
 		GsMat translations;
 		GsMat ptrans, prot;
-		prot.rotz(gs2pi / 10.0f*time);
+		prot.rotz(gs2pi*time);
 		ptrans.translation(GsVec(0.0f, 0.85f, -7.5f));
 		prop_trans->get() = ptrans * prot;
 		propShadow->get() = ptrans * prot;
-	}
+	//}
 }
 
 

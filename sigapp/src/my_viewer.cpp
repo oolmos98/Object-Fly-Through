@@ -598,10 +598,14 @@ void MyViewer::compute_curves() {
 	/*
 		Plane Path
 	*/
-	float radius = 65.0f;
-	for (float theta = gs2pi + (2 * (gs2pi / 30)); theta >= 0; theta -= gs2pi / 30) {
+	float radius = 45.0f;
+	for (float theta = gs2pi + (2 * (gs2pi / 10)); theta >= 0; theta -= gs2pi / 10) {
 		_planePathPoints.push() = GsPnt(radius * cosf(theta), 20.0f, radius * sinf(theta));
-		_republicPathPoints.push() = GsPnt(radius * cosf(theta), 40.0f, radius * sinf(theta));
+
+	}
+	radius = 65.0f;
+	for (float theta = gs2pi + (2 * (gs2pi / 60)); theta >= 0; theta -= gs2pi / 60) {
+	_republicPathPoints.push() = GsPnt(radius * cosf(theta), 40.0f, radius * sinf(theta));
 
 	}
 
@@ -609,20 +613,25 @@ void MyViewer::compute_curves() {
 	//showPoints(_planePathPoints);
 
 	_curvePlane->init();
-	_curveRepublic->init();
 	_curvePlane->begin_polyline();
-	_curveRepublic->begin_polyline();
 	for (float t = 2; t < _planePathPoints.size(); t += deltat) // note: the t range may change according to the curve
 	{
 		GsPnt x = eval_bspline(t, 3, _planePathPoints);
 		_curvePlane->push(x);
 		planePath.push(x);
-		x = eval_bspline(t, 3, _republicPathPoints);
-		_curveRepublic->push(x);
-		republicPath.push(x);
 	
 	}
 	_curvePlane->end_polyline();
+
+	_curveRepublic->init();
+	_curveRepublic->begin_polyline();
+
+	for (float t = 2; t < _republicPathPoints.size(); t += deltat) // note: the t range may change according to the curve
+	{
+		GsPnt x = eval_bspline(t, 3, _republicPathPoints);
+		_curveRepublic->push(x);
+		republicPath.push(x);
+	}
 	_curveRepublic->end_polyline();
 
 }
