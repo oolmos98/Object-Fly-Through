@@ -10,6 +10,7 @@
 # include <sigogl/ws_viewer.h>
 # include "Plane.h"
 # include "RepublicCarrier.h"
+# include "Town.h"
 
 // Viewer for this example:
 class MyViewer : public WsViewer
@@ -54,6 +55,7 @@ class MyViewer : public WsViewer
 	Plane* mahPlane;
 
 	RepublicCarrier* Venator;
+	Town* mountain;
 
    public :
 	MyViewer ( int x, int y, int w, int h, const char* l );
