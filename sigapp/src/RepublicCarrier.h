@@ -14,8 +14,8 @@ protected:
 	/*
 		Plane Model
 	*/
-	SnModel* plane;
-	SnGroup* planeBody, * flapsGroup;
+	SnModel* carr;
+	SnGroup* body;
 	
 	// Whole Scene Transform
 	SnTransform* sceneTransform;
@@ -37,19 +37,13 @@ protected:
 	/*
 		Camera
 	*/
-	bool moveCam; // Variable that will tell the program to move the cam
-	bool followPlane;	// Variable for following the camera
-	int camMode;		// Camera modes
+	
 	/*
 		Movements
 	*/
-	bool forward;
 	// The following variables will be added but decided not to due to
 	// complexity and lack of time. (Will be added in the future)
-	bool backward;
-	bool left;
-	bool right;
-	float vertical;
+	
 	// Matrices that will save the current rotation of the plane.
 	GsMat rotX, rotY, rotZ;
 

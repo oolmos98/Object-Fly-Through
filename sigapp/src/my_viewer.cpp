@@ -25,7 +25,7 @@ SnModel* ba;
 SnModel* pad[8];
 SnModel* model[4];
 SnModel* harrier[7];
-SnModel* land_models[2];
+SnModel* land_models[4];
 SnModel* boat_model[4];
 SnModel* curve;
 GsPnt position = GsPnt(0, 0, 0);
@@ -349,7 +349,7 @@ void MyViewer::import_land() {
 	land = new SnGroup;
 	boats = new SnGroup;
 	//Allocate memory for the models
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		land_models[i] = new SnModel();
 	}
 
@@ -369,23 +369,33 @@ void MyViewer::import_land() {
 
 
 	//Loading the lands.
-	land_models[1]->model()->load_obj("../model/water2.obj");
+	land_models[0]->model()->load_obj("../model/water2.obj");
 
-	if (land_models[0]->model()->load_obj("../model/bridge.obj")) {}
-	else gsout << "no Load" << gsnl;
-	land_models[0]->model()->scale(0.00035f);
-	land_models[1]->model()->scale(0.03f);
-	land_models[1]->model()->translate(GsVec(0, -5.5f, 0));
-	land_models[0]->model()->translate(GsVec(0, -6.7f, 0));
-	land_models[0]->model()->flat(true);
+	for (int i = 1; i < 4; i++) {
+		if (land_models[i]->model()->load("../model/low-poly-mill.obj")) {}
+		else gsout << "no Load" << gsnl;
 
-	land_models[1]->color(GsColor(64, 164, 223));
-	land_models[0]->color(GsColor(138, 140, 123));
+		land_models[i]->model()->scale(0.1f);
+		land_models[i]->model()->flat(true);
+	}
+	land_models[1]->model()->translate(GsVec(20, 20, 0));
+	land_models[2]->model()->translate(GsVec(10, 20, 30));
+	land_models[3]->model()->translate(GsVec(-30, 20, -30));
+
+	land_models[0]->model()->scale(0.03f);
+	land_models[0]->model()->translate(GsVec(0, -5.5f, 0));
+	//land_models[0]->model()->translate(GsVec(0, 20, 0));
+	//land_models[0]->model()->flat(true);
+	//land_models[0]->model()->smooth(true);
+	land_models[0]->color(GsColor(0, 141, 199));
+	//land_models[0]->color(GsColor(138, 140, 123));
 	land->separator(true);
 	land->add(_land[0] = new SnTransform);
 	land->add(land_models[0]);
 	land->add(_land[1] = new SnTransform);
 	land->add(land_models[1]);
+	land->add(land_models[2]);
+	land->add(land_models[3]);
 
 	rootg()->add_group(boats);
 	rootg()->add_group(land);
@@ -424,7 +434,9 @@ void MyViewer::align_models() {
 
 	sc.scaling(0.008f);
 	trans.translation(GsVec(0, -5, 0));
-	_land[1]->get().mult(_land[1]->get(), trans*rot);
+	_land[0]->get().mult(_land[0]->get(), trans*rot);
+	_land[1]->get().mult(_land[1]->get(), rot);
+
 
 }
 
@@ -538,7 +550,7 @@ void MyViewer::compute_curves() {
 	_curveRepublic->color(GsColor::red);
 	
 
-	float height = 3.5f;
+	float height = 15.5f;
 	_points.push() = position;
 	_points.push() = position;
 	_points.push() = GsPnt(0,height,0);
@@ -726,8 +738,8 @@ void MyViewer::cameraMode(int mode) {
 		
 		camera().eye.z = 40.0f;
 		camera().eye.y = 40.0f;
-		camera().up.z = -2.0f;
-		camera().up.y = 2.0f;
+		//camera().up.z = -2.0f;
+		camera().up;
 		camera().center;
 		camera().fovy = GS_TORAD(60);
 	
@@ -770,9 +782,10 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 2: {
-		camera().eye = calcPoints[i_global]+GsPnt(1,15,-18);
-		camera().center = calcPoints[i_global];
+		camera().eye = calcPoints[i_global]+GsPnt(5,15,-20);
+		camera().center = calcPoints[i_global+1];
 		camera().fovy = GS_TORAD(60);
+		camera().up.y=40.0f;
 		break;
 	}
 	}

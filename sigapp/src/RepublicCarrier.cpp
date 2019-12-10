@@ -26,18 +26,21 @@ RepublicCarrier::~RepublicCarrier() {
 
 void RepublicCarrier::import_model() {
 
-	plane = new SnModel();
-	planeBody = new SnGroup;
+	carr = new SnModel;
+	body = new SnGroup;
 	sceneTransform = new SnTransform;
 	//flapsGroup = new SnGroup;
 
-	plane->model()->load_obj("../model/VENATOR2.obj");
-	//plane->model()->smooth(true);
-	planeBody->add(plane);
-	plane->color(GsColor(74,74,74));
-	plane->model()->flat(true);
-	plane->model()->rotate(GsQuat(GsVec::j, gspi));
-	//plane->model()->scale(1.3f);
+	if (carr->model()->load_obj("../model/venator2.obj"))
+		body->add(carr);
+
+	else gsout << "error" << gsnl;
+	//carr->model()->smooth(true);
+	//body->separator(true);
+	carr->color(GsColor(74,74,74));
+	carr->model()->flat(true);
+	carr->model()->rotate(GsQuat(GsVec::j, gspi));
+	//carr->model()->scale(1.3f);
 	GsMat rot, trans;
 	rot.rot(GsVec::j, gs2pi);
 	trans.translation(GsVec(0.0f, 5.0f, 0.0f));
@@ -48,7 +51,7 @@ void RepublicCarrier::import_model() {
 	//	Add the sceneTransform
 	//*/
 	planeClass->add(sceneTransform);
-	planeClass->add_group(planeBody, true);
+	planeClass->add_group(body, true);
 	
 
 
@@ -59,7 +62,6 @@ void RepublicCarrier::import_model() {
 }
 
 void RepublicCarrier::run_animation(float time) {
-	if (_animating) { // do nothing if animating is not enabled
 
 		GsVec origin = GsVec(0.0f, 1.0f, 1.0f);
 		GsMat translations;
@@ -67,7 +69,6 @@ void RepublicCarrier::run_animation(float time) {
 		prot.rotz(gs2pi / 10.0f*time);
 		ptrans.translation(GsVec(0.0f, 0.85f, -7.5f));
 		
-	}
 }
 
 
@@ -84,7 +85,7 @@ int RepublicCarrier::handle_keyboard(const GsEvent& e) {
 	/*
 		Doing rotX * rotY * rotZ will save the model's x, y, z rotation.
 	*/
-	// Tilt the plane to left
+	// Tilt the carr to left
 	case GsEvent::KeyLeft:
 	case 'a': {
 
@@ -92,7 +93,7 @@ int RepublicCarrier::handle_keyboard(const GsEvent& e) {
 
 		break;
 	}
-			// Tilt the plane to right
+			// Tilt the carr to right
 	case GsEvent::KeyRight:
 	case 'd': {
 
@@ -100,7 +101,7 @@ int RepublicCarrier::handle_keyboard(const GsEvent& e) {
 
 		break;
 	}
-			// Tilt the plane backward
+			// Tilt the carr backward
 	case GsEvent::KeyDown: {
 
 		sceneTransform->get() = trans * rotX * rotY * rotZ * trans.inverse() * trans * scaling;
@@ -108,14 +109,14 @@ int RepublicCarrier::handle_keyboard(const GsEvent& e) {
 
 		break;
 	}
-						 // Tilt the plane forward
+						 // Tilt the carr forward
 	case  GsEvent::KeyUp: {
 
 		sceneTransform->get() = trans * rotX * rotY * rotZ * trans.inverse() * trans * scaling;
 
 		break;
 	}
-						// Rotate the plane towards the right
+						// Rotate the carr towards the right
 	case 'e': {
 
 		sceneTransform->get() = trans * rotX * rotY * rotZ * trans.inverse() * trans * scaling;
@@ -123,14 +124,14 @@ int RepublicCarrier::handle_keyboard(const GsEvent& e) {
 
 		break;
 	}
-			// Rotate the plane towards the left
+			// Rotate the carr towards the left
 	case 'q': {
 
 		sceneTransform->get() = trans * rotX * rotY * rotZ * trans.inverse() * trans * scaling;
 
 		break;
 	}
-			// Move the plane forward
+			// Move the carr forward
 	}
 	return 1;
 }

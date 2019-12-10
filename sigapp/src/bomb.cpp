@@ -30,5 +30,5 @@ void Bomb::Explode() {
 }
 
 int Bomb::handle_keyboard(const GsEvent& e) {
-
+	return 1;
 }
