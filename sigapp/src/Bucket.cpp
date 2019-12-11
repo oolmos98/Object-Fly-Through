@@ -36,7 +36,7 @@ void Bucket::import_model() {
 	else gsout << "error" << gsnl;
 
 	body->add(carr);
-
+	carr->color(GsColor(192, 192, 192));
 	//carr->model()->smooth(true);
 	//body->separator(true);
 	//carr->color(GsColor(74,74,74));

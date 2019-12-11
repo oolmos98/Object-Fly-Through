@@ -173,7 +173,7 @@ void MyViewer::import_models ()
 	small_p = new SnGroup;
 	big_p = new SnGroup;
 	carrier = new SnGroup;
-	shadowHeli = new SnGroup;
+	//shadowHeli = new SnGroup;
 
 	for (int i = 0; i < 4; i++) {
 		model[i] = new SnModel();
@@ -319,7 +319,7 @@ void MyViewer::import_models ()
 
 	//Given by the Professor
 	//This part sets the material to be placed into the shadow models
-	shMaterial = new SnMaterial;
+	/*shMaterial = new SnMaterial;
 	GsMaterial m;
 	m.diffuse = GsColor::black;
 	shMaterial->material(m, 4);
@@ -330,7 +330,7 @@ void MyViewer::import_models ()
 	shadowHeli->add(shMaterial);
 	shadowHeli->add(big_p);
 	shadowHeli->add(heli);
-	shadowHeli->add(small_p);
+	shadowHeli->add(small_p);*/
 	
 	
 	////Adding the heli group into root.
@@ -344,7 +344,7 @@ void MyViewer::import_models ()
 	rootg()->add_group(heli);
 	rootg()->add_group(small_p);
 	rootg()->add_group(big_p);
-	rootg()->add_group(shadowHeli);
+	//rootg()->add_group(shadowHeli);
 	compute_mappings("");
 }
 
@@ -385,9 +385,9 @@ void MyViewer::import_land() {
 		land_models[i]->model()->scale(0.1f);
 		land_models[i]->model()->flat(true);
 	}
-	land_models[1]->model()->translate(GsVec(20, 20, 0));
+	land_models[1]->model()->translate(GsVec(30, 30, -25));
 	land_models[2]->model()->translate(GsVec(10, 20, 30));
-	land_models[3]->model()->translate(GsVec(-30, 20, -30));
+	land_models[3]->model()->translate(GsVec(-30, 20, -10));
 
 	land_models[0]->model()->scale(0.03f);
 	land_models[0]->model()->translate(GsVec(0, -5.5f, 0));
@@ -430,7 +430,7 @@ void MyViewer::align_models() {
 	c->get().mult(c->get(), rot*sc * trans);
 	t->get().scaling(0.15f);
 	trans.translation(GsVec(0, -offset, 0));
-	computeShadow();
+	//computeShadow();
 	entire->get().roty(gspi);
 
 	sc.scaling(0.84f);
@@ -565,11 +565,18 @@ void MyViewer::compute_curves() {
 	_points.push() = GsPnt(40, height, 35);
 	_points.push() = GsPnt(40, height, 20);
 	_points.push() = GsPnt(20, height, -20);
-	_points.push() = GsPnt(15, height, -20);
-	_points.push() = GsPnt(10, height, -20);
-	_points.push() = GsPnt(10, height, -25);
-	_points.push() = GsPnt(-10, height, -10);
-	_points.push() = GsPnt(-50, height, 40);
+	_points.push() = GsPnt(0, height-5, -20);
+	_points.push() = GsPnt(-10, height-5, -20);
+	_points.push() = GsPnt(-30, height-5, -50);
+	_points.push() = GsPnt(-10, height-5, -10);
+	_points.push() = GsPnt(0, height-5, 40);
+	_points.push() = GsPnt(-10, height-5, 30);
+	_points.push() = GsPnt(0, height-5, -5);
+	_points.push() = GsPnt(0, height - 5, 0);
+	_points.push() = GsPnt(0, 0, 0);
+	_points.push() = GsPnt(0, 0, 0);
+
+
 
 	_curve->init();
 
@@ -749,12 +756,11 @@ void MyViewer::cameraMode(int mode) {
 		camera().up;
 		camera().center;
 		camera().fovy = GS_TORAD(60);
-	
 		render();
 		ws_check();
 		break;
 	}
-	case 3: {
+	case 1: {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
 			double frdt = 1.0 / 30.0; //frames
@@ -775,10 +781,8 @@ void MyViewer::cameraMode(int mode) {
 					if (index < camPath.size()) {
 						camera().eye = camPath[index];
 						camera().center;
-						camera().fovy = GS_TORAD(30);
+						camera().fovy = GS_TORAD(80);
 					}
-
-
 					index++;
 					message().setf("local time = % f", lt);
 					render();
@@ -789,10 +793,30 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 2: {
-		camera().eye = calcPoints[i_global]+GsPnt(5,15,-20);
-		camera().center = calcPoints[i_global+1];
-		camera().fovy = GS_TORAD(60);
-		camera().up.y=40.0f;
+		if (i_global < calcPoints.size()) {
+			camera().eye = calcPoints[i_global] + GsPnt(5, 15, -20);
+			camera().center = calcPoints[i_global];
+			camera().fovy = GS_TORAD(60);
+			camera().up.y = 40.0f;
+		}
+		break;
+	}
+	case 3: {
+		if (i_global < planePath.size()) {
+			camera().eye = planePath[i_global] + GsPnt(10, 15, 10);
+			camera().center = planePath[i_global];
+			camera().fovy = GS_TORAD(60);
+			camera().up.y = 40.0f;
+		}
+		break;
+	}
+	case 4: {
+		if (i_global < republicPath.size()) {
+			camera().eye = republicPath[i_global] + GsPnt(15, 25, 15);
+			camera().center = republicPath[i_global];
+			camera().fovy = GS_TORAD(60);
+			camera().up.y = 40.0f;
+		}
 		break;
 	}
 	}
@@ -811,7 +835,7 @@ void MyViewer::computeShadow() {
 		0.0f, 0.0f, 0.0f, 1.0f);
 
 	GsMat tr;
-	tr.translation(GsVec(0, -offset+0.2f, 0));
+	tr.translation(GsVec(0, -offset-5.0f, 0));
 	sH->get().mult(tr, s);
 }
 
@@ -823,7 +847,7 @@ void MyViewer::run_animation ()
 	double time = 0, lt = 0, t0 = gs_time();
 	double frdt = 1.0 / 30; //frames
 	int i = i_global;
-
+	cMode = 2;
 	//rot.roty(gspi/30);
 	do
 	{
@@ -834,10 +858,12 @@ void MyViewer::run_animation ()
 		rotateX(baxis, -angle);
 		rotateX(saxis, -angle);
 
-		i = i_global;
+		rotateY(_land[1], -gspi/700);
 
-		if (cMode == 3 && i < calcPoints.size()) {
-			cameraMode(cMode - 1);
+		i = i_global;
+		
+		if (cMode <5) {
+			cameraMode(cMode);
 		}
 		if (i < calcPoints.size() - 1) {
 			float x, y, z;
@@ -879,11 +905,12 @@ void MyViewer::run_animation ()
 		i_global++;
 
 
-		computeShadow();
+		//computeShadow();
 		render();
 
 	} while (_animating);
 
+	i_global = 0;
 	_animating = false;
 	options(-1);
 
@@ -1053,11 +1080,18 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		break;
 
 	case ' ': {
-		if (cMode == 3) cMode = 0;
 		//gsout << cMode << gsnl;
+		if (_animating) {
+			if (cMode == 4)
+				cMode = 2;
+			else if (cMode == 2) cMode = 3;
+			else cMode = 4;
+		}
+		else {
+			if (cMode == 1) cMode = 0;
+			else cMode = 1;
+		}
 		cameraMode(cMode);
-		if (cMode < 3)
-			cMode++;
 
 		options(5);
 		break;
@@ -1070,6 +1104,13 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		options(10);
 		break;
 	}
+	case 'v': {
+		_curve->swap_visibility();
+		_curveCam->swap_visibility();
+		_curvePlane->swap_visibility();
+		_curveRepublic->swap_visibility();
+		break;
+	}
 
 	default:
 	{
@@ -1078,7 +1119,7 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 
 	}
 	options(-1);
-	computeShadow();
+	//computeShadow();
 	render();
 	ws_check();
 	return 0;

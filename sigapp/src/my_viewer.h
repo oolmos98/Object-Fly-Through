@@ -16,7 +16,7 @@
 class MyViewer : public WsViewer
 {  protected :
 	SnGroup* heli, * small_p, * big_p, * carrier, * land, * boats;
-	SnGroup* shadowHeli;
+	//SnGroup* shadowHeli;
 	SnTransform* body, * c, * p, * entire, * bprop, * baxis, * saxis, * sprop, * t, * sH, * h, * _land[2], * _boat;
 	SnLines* l;
 	SnPolyEditor* _polyed;
