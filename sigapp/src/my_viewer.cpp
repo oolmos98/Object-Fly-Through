@@ -198,11 +198,11 @@ void MyViewer::import_models ()
 	rootg()->add_group(Venator->model(), true);
 
 
-	mountain = new Town();
-	mountain->set_position(GsVec(105.0f, -2.5f, 0));
-	mountain->setScaling(1.5f);
+	bucket = new Bucket();
+	bucket->set_position(GsVec(0, -175, 0));
+	bucket->setScaling(0.55f);
 
-	rootg()->add_group(mountain->model(), true);
+	rootg()->add_group(bucket->model(), true);
 
 	//Building HelicopterPads and making sure its positioned correctly before any transformations
 	build_pad();

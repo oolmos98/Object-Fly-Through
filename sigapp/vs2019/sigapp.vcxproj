@@ -29,14 +29,14 @@
   <ItemGroup>
     <ClCompile Include="..\src\bomb.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\Town.cpp" />
+    <ClCompile Include="..\src\Bucket.cpp" />
     <ClCompile Include="..\src\my_viewer.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RepublicCarrier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\bomb.h" />
-    <ClInclude Include="..\src\Town.h" />
+    <ClInclude Include="..\src\Bucket.h" />
     <ClInclude Include="..\src\my_viewer.h" />
     <ClInclude Include="..\src\Plane.h" />
     <ClInclude Include="..\src\RepublicCarrier.h" />
