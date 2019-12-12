@@ -188,13 +188,13 @@ void MyViewer::import_models ()
 	// Jeff's Plane
 	mahPlane = new Plane();
 	mahPlane->setScaling(0.35f);
-	mahPlane->set_position(GsVec(65.0f*cosf(0), 20.0f, 65.0f * sinf(0)));
+	mahPlane->set_position(_planePathPoints[1]);
 	rootg()->add_group(mahPlane->model(), true);
 	
 	Venator = new RepublicCarrier();
 	Venator->setScaling(1.5f);
 	//Venator->setrotY(gspi);
-	Venator->set_position(GsVec(65.0f, 40, -30.0f));
+	Venator->set_position(_republicPathPoints[0]);
 	rootg()->add_group(Venator->model(), true);
 
 
@@ -624,7 +624,7 @@ void MyViewer::compute_curves() {
 	/*
 		Plane Path
 	*/
-	float radius = 45.0f;
+	float radius = 50.0f;
 	for (float theta = gs2pi + (2 * (gs2pi / 10)); theta >= 0; theta -= gs2pi / 10) {
 		_planePathPoints.push() = GsPnt(radius * cosf(theta), 20.0f, radius * sinf(theta));
 
@@ -793,27 +793,27 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 2: {
-		if (i_global < calcPoints.size()) {
-			camera().eye = calcPoints[i_global] + GsPnt(5, 15, -20);
-			camera().center = calcPoints[i_global];
+		if (i_heli < calcPoints.size()) {
+			camera().eye = calcPoints[i_heli] + GsPnt(5, 15, -20);
+			camera().center = calcPoints[i_heli];
 			camera().fovy = GS_TORAD(60);
 			camera().up.y = 40.0f;
 		}
 		break;
 	}
 	case 3: {
-		if (i_global < planePath.size()) {
-			camera().eye = planePath[i_global] + GsPnt(10, 15, 10);
-			camera().center = planePath[i_global];
+		if (i_plane < planePath.size()) {
+			camera().eye = planePath[i_plane] + GsPnt(10, 15, 10);
+			camera().center = planePath[i_plane];
 			camera().fovy = GS_TORAD(60);
 			camera().up.y = 40.0f;
 		}
 		break;
 	}
 	case 4: {
-		if (i_global < republicPath.size()) {
-			camera().eye = republicPath[i_global] + GsPnt(15, 25, 15);
-			camera().center = republicPath[i_global];
+		if (i_rep < republicPath.size()) {
+			camera().eye = republicPath[i_rep] + GsPnt(15, 25, 15);
+			camera().center = republicPath[i_rep];
 			camera().fovy = GS_TORAD(60);
 			camera().up.y = 40.0f;
 		}
@@ -846,7 +846,9 @@ void MyViewer::run_animation ()
 	GsMat tr, rot, sca;
 	double time = 0, lt = 0, t0 = gs_time();
 	double frdt = 1.0 / 30; //frames
-	int i = i_global;
+	int i = i_heli;
+	int ii = i_plane;
+	int iii = i_rep;
 	cMode = 2;
 	//rot.roty(gspi/30);
 	do
@@ -860,14 +862,16 @@ void MyViewer::run_animation ()
 
 		rotateY(_land[1], -gspi/700);
 
-		i = i_global;
-		
+		i = i_heli;
+		ii = i_plane;
+		iii = i_rep;
+
 		if (cMode <5) {
 			cameraMode(cMode);
 		}
 		if (i < calcPoints.size() - 1) {
 			float x, y, z;
-		
+
 			x = calcPoints[i + 1].x;
 			y = calcPoints[i + 1].y;
 			z = calcPoints[i + 1].z;
@@ -878,31 +882,33 @@ void MyViewer::run_animation ()
 
 			rot.roty(angle);
 			t->get() = tr * rot * tr.inverse() * tr * sca;
-			
+
 			offset += calcPoints[i + 1].y - calcPoints[i].y;
+			i_heli++;
 		}
+		else i_heli = 0;
 
 		mahPlane->run_animation(float(lt));
 
-		if (i < planePath.size() - 1) {
-			GsPnt nextPnt = planePath[i + 1];
-			GsPnt currPnt = planePath[i];
+		if (ii < planePath.size() - 1) {
 
-			float angle = atan2(planePath[i].x-planePath[i + 1].x, planePath[i].z - planePath[i+1].z );
+			float angle = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
 
-			mahPlane->set_position(planePath[i]);
+			mahPlane->set_position(planePath[ii]);
 			mahPlane->setrotY(angle);
+			i_plane++;
 		}
-		if (i < republicPath.size() - 1) {
-			GsPnt nextPnt = republicPath[i + 1];
-			GsPnt currPnt = republicPath[i];
+		else i_plane = 0;
 
-			float angle = atan2(republicPath[i].x - republicPath[i + 1].x, republicPath[i].z - republicPath[i + 1].z);
+		if (iii < republicPath.size() - 1) {
 
-			Venator->set_position(republicPath[i]);
+			float angle = atan2(republicPath[iii].x - republicPath[iii + 1].x, republicPath[iii].z - republicPath[iii + 1].z);
+
+			Venator->set_position(republicPath[iii]);
 			Venator->setrotY(angle);
+			i_rep++;
 		}
-		i_global++;
+		else i_rep = 0;
 
 
 		//computeShadow();
@@ -910,7 +916,7 @@ void MyViewer::run_animation ()
 
 	} while (_animating);
 
-	i_global = 0;
+	i_heli = i_plane = i_rep = 0;
 	_animating = false;
 	options(-1);
 

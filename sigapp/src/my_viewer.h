@@ -48,7 +48,7 @@ class MyViewer : public WsViewer
 	// Misc
 	SnGroup* _pointPlacement;
 
-	int i_global = 0;
+	int i_heli = 0, i_plane = 0, i_rep = 0;
 
 
 	// Jeff's Plane
