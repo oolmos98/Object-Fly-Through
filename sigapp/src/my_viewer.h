@@ -55,7 +55,9 @@ class MyViewer : public WsViewer
 	Plane* mahPlane;
 
 	RepublicCarrier* Venator;
+
 	Bucket* bucket;
+
 
    public :
 	MyViewer ( int x, int y, int w, int h, const char* l );

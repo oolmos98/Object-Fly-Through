@@ -14,7 +14,6 @@ protected:
 	/*
 		Plane Model
 	*/
-	SnModel* carr;
 	SnGroup* body;
 	
 	// Whole Scene Transform
@@ -55,6 +54,8 @@ protected:
 
 	bool _animating;
 public:
+	SnModel* carr;
+
 	Bucket();
 	Bucket(float model_scale);
 	~Bucket();

@@ -346,6 +346,8 @@ void MyViewer::import_models ()
 	rootg()->add_group(big_p);
 	//rootg()->add_group(shadowHeli);
 	compute_mappings("");
+
+	
 }
 
 
@@ -625,8 +627,10 @@ void MyViewer::compute_curves() {
 		Plane Path
 	*/
 	float radius = 50.0f;
+	float h = 20.0f;
 	for (float theta = gs2pi + (2 * (gs2pi / 10)); theta >= 0; theta -= gs2pi / 10) {
-		_planePathPoints.push() = GsPnt(radius * cosf(theta), 20.0f, radius * sinf(theta));
+		_planePathPoints.push() = GsPnt(radius * cosf(theta), h, radius * sinf(theta));
+		h += h > 20.0f ? -5.0f : 5.0f;
 
 	}
 	radius = 65.0f;
@@ -892,10 +896,12 @@ void MyViewer::run_animation ()
 
 		if (ii < planePath.size() - 1) {
 
-			float angle = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
-
+			float angley = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
+			//float anglez = atan2(planePath[ii+1].y - planePath[ii].y, planePath[ii+1].x - planePath[ii].x);
 			mahPlane->set_position(planePath[ii]);
-			mahPlane->setrotY(angle);
+			mahPlane->setrotY(angley);
+			//mahPlane->setrotX(anglez);
+			
 			i_plane++;
 		}
 		else i_plane = 0;
@@ -910,11 +916,22 @@ void MyViewer::run_animation ()
 		}
 		else i_rep = 0;
 
-
+		boat_model[0]->color(GsColor(i*2, ii, iii*2));
+		boat_model[1]->color(GsColor(i, ii*3, iii*5));
+		boat_model[2]->color(GsColor(i * 5, ii*3, iii * 2));
+		boat_model[3]->color(GsColor(i * 2, ii*6, iii * 2));
+		land_models[0]->color(GsColor(i*2, ii*2, iii*3));
 		//computeShadow();
 		render();
 
 	} while (_animating);
+
+
+	boat_model[0]->color(GsColor(132, 132, 130));
+	boat_model[1]->color(GsColor(132, 132, 130));
+	boat_model[2]->color(GsColor(132, 132, 130));
+	boat_model[3]->color(GsColor(132, 132, 130));
+	land_models[0]->color(GsColor(0, 141, 199));
 
 	i_heli = i_plane = i_rep = 0;
 	_animating = false;
