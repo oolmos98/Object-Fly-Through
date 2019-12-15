@@ -937,11 +937,20 @@ void MyViewer::run_animation ()
 		}
 		else i_rep = 0;
 
-		boat_model[0]->color(GsColor(i*2, ii, iii*2));
-		boat_model[1]->color(GsColor(i, ii*3, iii*5));
-		boat_model[2]->color(GsColor(i * 5, ii*3, iii * 2));
-		boat_model[3]->color(GsColor(i * 2, ii*6, iii * 2));
-		land_models[0]->color(GsColor(i*2, ii*2, iii*3));
+		if (randomColor) {
+			boat_model[0]->color(GsColor(i * 2, ii, iii * 2));
+			boat_model[1]->color(GsColor(i, ii * 3, iii * 5));
+			boat_model[2]->color(GsColor(i * 5, ii * 3, iii * 2));
+			boat_model[3]->color(GsColor(i * 2, ii * 6, iii * 2));
+			land_models[0]->color(GsColor(i * 2, ii * 2, iii * 3));
+		}
+		else {
+			boat_model[0]->color(GsColor(132, 132, 130));
+			boat_model[1]->color(GsColor(132, 132, 130));
+			boat_model[2]->color(GsColor(132, 132, 130));
+			boat_model[3]->color(GsColor(132, 132, 130));
+			land_models[0]->color(GsColor(0, 141, 199));
+		}
 		//computeShadow();
 		render();
 
@@ -1153,6 +1162,10 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		_curveCam->swap_visibility();
 		_curvePlane->swap_visibility();
 		_curveRepublic->swap_visibility();
+		break;
+	}
+	case 'r': {
+		randomColor = !randomColor;
 		break;
 	}
 

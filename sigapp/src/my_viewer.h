@@ -53,7 +53,7 @@ class MyViewer : public WsViewer
 
 	int i_heli = 0, i_plane = 0, i_rep = 0;
 
-
+	bool randomColor = false;
 	// Jeff's Plane
 	Plane* mahPlane;
 
