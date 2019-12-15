@@ -3,6 +3,7 @@
 # include <sig/sn_poly_editor.h>
 # include <sig/sn_lines2.h>
 # include <sig/sn_lines.h>
+# include <sig/gs_light.h>
 
 # include <sigogl/ui_button.h>
 # include <sigogl/ui_check_button.h>
@@ -11,6 +12,8 @@
 # include "Plane.h"
 # include "RepublicCarrier.h"
 # include "Bucket.h"
+# include "Death_Star.h"
+# include "Cube.h"
 
 // Viewer for this example:
 class MyViewer : public WsViewer
@@ -57,7 +60,8 @@ class MyViewer : public WsViewer
 	RepublicCarrier* Venator;
 
 	Bucket* bucket;
-
+	DeathStar* deathstar;
+	Cube* cube;
 
    public :
 	MyViewer ( int x, int y, int w, int h, const char* l );

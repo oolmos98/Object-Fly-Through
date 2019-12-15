@@ -48,7 +48,16 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 	import_models();
 	align_models();
 	options(0);
+	//num_lights(4);
 	
+	//gsout << num_lights() << gsnl;
+	/*light(0).position = GsVec(0, -80, 60);
+	light(1).position = GsVec(0, 80, 60);
+	light(2).position = GsVec(0, 80, -60);
+	light(3).position = GsVec(0, -80, -60);
+
+	render();*/
+
 }
 
 static void my_polyed_callback(SnPolyEditor* pe, enum SnPolyEditor::Event e, int pid)
@@ -188,7 +197,7 @@ void MyViewer::import_models ()
 	// Jeff's Plane
 	mahPlane = new Plane();
 	mahPlane->setScaling(0.35f);
-	mahPlane->set_position(_planePathPoints[1]);
+	mahPlane->set_position(_planePathPoints[2]);
 	rootg()->add_group(mahPlane->model(), true);
 	
 	Venator = new RepublicCarrier();
@@ -203,6 +212,18 @@ void MyViewer::import_models ()
 	bucket->setScaling(0.55f);
 
 	rootg()->add_group(bucket->model(), true);
+
+	/*deathstar = new DeathStar();
+	deathstar->set_position(GsVec(0, 100, -50));
+	deathstar->setScaling(2.0f);
+
+	rootg()->add_group(deathstar->model(), true);*/
+
+	cube = new Cube();
+	//Cube->set_position(GsVec(0, 100, -50));
+	//Cube->setScaling(2.0f);
+
+	rootg()->add_group(cube->model(), true);
 
 	//Building HelicopterPads and making sure its positioned correctly before any transformations
 	build_pad();
