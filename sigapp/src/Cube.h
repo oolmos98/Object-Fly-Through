@@ -15,6 +15,7 @@ protected:
 	*/
 	SnGroup* face;
 	SnModel* carr[6];
+	SnModel* carr2[6];
 
 	// Whole Scene Transform
 	SnTransform* sceneTransform;

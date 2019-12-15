@@ -32,6 +32,12 @@ void Cube::import_model() {
 	carr[4] = new SnModel();
 	carr[5] = new SnModel();
 
+	carr2[0] = new SnModel();
+	carr2[1] = new SnModel();
+	carr2[2] = new SnModel();
+	carr2[3] = new SnModel();
+	carr2[4] = new SnModel();
+	carr2[5] = new SnModel();
 	face = new SnGroup;
 	sceneTransform = new SnTransform;
 	//flapsGroup = new SnGroup;
@@ -59,7 +65,7 @@ void Cube::import_model() {
 			m.N.push() = (GsVec(0, 60, 80));
 			m.N.push() = (GsVec(0, 60, 80));
 		}
-		else if (i == 1 || i == 5) {
+		else if (i == 1) {
 			m.N.push() = (GsVec(60, 0, 80));
 			m.N.push() = (GsVec(60, 0, 80));
 			m.N.push() = (GsVec(60, 0, 80));
@@ -75,7 +81,7 @@ void Cube::import_model() {
 			m.N.push() = (GsVec(0, -60, 80));
 			m.N.push() = (GsVec(0, -60, 80));
 		}
-		else if (i == 3 || i == 4) {
+		else if (i == 3 || i == 4||i ==5) {
 			m.N.push() = (GsVec(-60, 0, 80));
 			m.N.push() = (GsVec(-60, 0, 80));
 			m.N.push() = (GsVec(-60, 0, 80));
@@ -119,11 +125,66 @@ void Cube::import_model() {
 
 	carr[1]->model()->rotate(GsQuat(GsVec::k, gspi / 2));
 	carr[2]->model()->rotate(GsQuat(GsVec::k, gspi));
-	carr[3]->model()->rotate(GsQuat(GsVec::k, -gspi/2));
+	carr[3]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
 	carr[4]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
 	carr[4]->model()->rotate(GsQuat(GsVec::j, -gspi / 2));
 	carr[5]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
 	carr[5]->model()->rotate(GsQuat(GsVec::j, gspi / 2));
+
+	for (int i = 0; i < 6; i++) {
+		GsModel& m = *carr2[i]->model();
+		float x = 200.0f;
+		float h = 200.0f;
+		//Vertices
+		m.V.push() = GsVec(-x, -h, -x);
+		m.V.push() = GsVec(-x, -h, x);
+		m.V.push() = GsVec(x, -h, -x);
+		m.V.push() = GsVec(-x, -h, x);
+		m.V.push() = GsVec(x, -h, x);
+		m.V.push() = GsVec(x, -h, -x);
+		//Faces
+		m.F.push() = GsModel::Face(2, 1, 0);
+		m.F.push() = GsModel::Face(4, 3, 2);
+
+		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));
+		//Textures, code given by Professor
+		m.T.push() = GsVec2(0.0f, 1.0f);
+		m.T.push() = GsVec2(0.0f, 0.0f);
+		m.T.push() = GsVec2(1.0f, 1.0f);
+		m.T.push() = GsVec2(0.0f, 0.0f);
+		m.T.push() = GsVec2(1.0f, 0.0f);
+		m.T.push() = GsVec2(1.0f, 1.0f);
+
+		GsModel::Group& g = *m.G.push();
+
+		g.fi = 0;
+		g.fn = m.F.size();
+		g.dmap = new GsModel::Texture;
+		g.dmap->fname.set("../textures/faceBottom.jpg");
+		m.M.push().init();
+		m.M.top() = GsMaterial::DefaultEmission;
+		m.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+		m.textured = true;
+	}
+	face->add(carr2[0]);
+	face->add(carr2[1]);
+	face->add(carr2[2]);
+	face->add(carr2[3]);
+	face->add(carr2[4]);
+	face->add(carr2[5]);
+
+	carr2[1]->model()->rotate(GsQuat(GsVec::k, gspi / 2));
+	carr2[2]->model()->rotate(GsQuat(GsVec::k, gspi));
+	carr2[3]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
+	carr2[4]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
+	carr2[4]->model()->rotate(GsQuat(GsVec::j, -gspi / 2));
+	carr2[5]->model()->rotate(GsQuat(GsVec::k, -gspi / 2));
+	carr2[5]->model()->rotate(GsQuat(GsVec::j, gspi / 2));
 
 	
 

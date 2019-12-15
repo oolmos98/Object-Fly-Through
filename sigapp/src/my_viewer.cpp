@@ -806,7 +806,7 @@ void MyViewer::cameraMode(int mode) {
 					if (index < camPath.size()) {
 						camera().eye = camPath[index];
 						camera().center;
-						camera().fovy = GS_TORAD(80);
+						camera().fovy = GS_TORAD(100);
 					}
 					index++;
 					message().setf("local time = % f", lt);
