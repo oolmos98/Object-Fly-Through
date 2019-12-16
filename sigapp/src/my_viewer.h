@@ -28,12 +28,15 @@ class MyViewer : public WsViewer
 	SnLines* _curveCam;
 	SnLines* _curvePlane;
 	SnLines* _curveRepublic;
+	SnLines* _curveCam1;
 
 	UiSlider* _slider;
 	GsArray<GsPnt> _points;
 	GsArray<GsPnt> _camPathPoints;
 	GsArray<GsPnt> _planePathPoints;
 	GsArray<GsPnt> _republicPathPoints;
+	GsArray<GsPnt> _camPath1;
+
 
 	SnMaterial* shMaterial;
 	int altitude = 0;
@@ -43,7 +46,7 @@ class MyViewer : public WsViewer
 	float angle = gspi / 10;
 	int cMode = 0;
 
-	enum MenuEv { EvNormals, EvAnimate, EvDeltaT, EvExit };
+	enum MenuEv { EvNormals, EvAnimate, EvAnimate2, EvDeltaT, EvExit };
 	UiCheckButton* _nbut;
 	bool _animating;
 
@@ -54,7 +57,7 @@ class MyViewer : public WsViewer
 
 	int i_heli = 0, i_plane = 0, i_rep = 0;
 
-	bool randomColor = false;
+	bool randomColor = false, _animate1 = false;
 	// Jeff's Plane
 	Plane* mahPlane;
 
@@ -90,8 +93,9 @@ class MyViewer : public WsViewer
 
 	// misc
 	void showPoints(GsArray<GsPnt> P);
+	void computeAnimate1();
 
-	void run_animation ();
+	void run_animation();
 	virtual int handle_keyboard ( const GsEvent &e ) override;
 	virtual int uievent ( int e ) override;
 	virtual void spin_animation_occured() override;
