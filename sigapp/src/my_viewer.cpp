@@ -199,6 +199,10 @@ void MyViewer::import_models ()
 	mahPlane->setScaling(0.35f);
 	mahPlane->set_position(_planePathPoints[2]);
 	rootg()->add_group(mahPlane->model(), true);
+
+	dahRocket = new Rocket();
+	rootg()->add_group(dahRocket->model(), true);
+
 	
 	Venator = new RepublicCarrier();
 	Venator->setScaling(1.5f);

@@ -35,6 +35,7 @@
     <ClCompile Include="..\src\my_viewer.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RepublicCarrier.cpp" />
+    <ClCompile Include="..\src\rocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\bomb.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="..\src\my_viewer.h" />
     <ClInclude Include="..\src\Plane.h" />
     <ClInclude Include="..\src\RepublicCarrier.h" />
+    <ClInclude Include="..\src\rocket.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D439ED53-23FE-4EC8-9A4F-F0EE1EF50085}</ProjectGuid>
