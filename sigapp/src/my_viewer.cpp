@@ -44,7 +44,9 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 
 	build_ui();
 	compute_curves();
+	computeAnimate1();
 	import_land();
+
 	import_models();
 	align_models();
 	options(0);
@@ -78,7 +80,8 @@ void MyViewer::build_ui ()
 	{	UiPanel* p=sp;
 		p->add ( _nbut=new UiCheckButton ( "Normals", EvNormals ) ); 
 	}*/
-	p->add ( new UiButton ( "Animate", EvAnimate ) );
+	p->add(new UiButton("First Animation", EvAnimate));
+	p->add(new UiButton("Animate", EvAnimate2));
 	p->add ( new UiButton ( "Exit", EvExit ) ); p->top()->separate();
 
 	p->add(_slider = new UiSlider(" dt:", EvDeltaT, 0, 0, 150));
@@ -579,6 +582,10 @@ void MyViewer::compute_curves() {
 	_curveRepublic->line_width(3.0f);
 	_curveRepublic->color(GsColor::red);
 	
+	_curve->swap_visibility();
+	_curveCam->swap_visibility();
+	_curvePlane->swap_visibility();
+	_curveRepublic->swap_visibility();
 
 	float height = 15.5f;
 	_points.push() = position;
@@ -700,6 +707,44 @@ void MyViewer::showPoints(GsArray<GsPnt> P) {
 }
 
 
+void MyViewer::computeAnimate1() {
+
+		rootg()->add(_curveCam1 = new SnLines);
+		_curveCam1->line_width(20.0f);
+		_curveCam1->color(GsColor::cyan);
+
+		_camPath1.push(GsPnt(500, 500, 500));
+		_camPath1.push(GsPnt(450, 450, 450));
+
+
+		_camPath1.push(GsPnt(400, 400, 250));
+
+		_camPath1.push(GsPnt(250, 250, 250));
+		_camPath1.push(GsPnt(250, 200, 200));
+		_camPath1.push(GsPnt(250, 150, 150));
+		_camPath1.push(GsPnt(250, 140, 120));
+		_camPath1.push(GsPnt(200, 130, 100));
+		_camPath1.push(GsPnt(150,100,100));
+		_camPath1.push(GsPnt(100, 40, 100));
+
+		float radius = 100;
+		for (float theta = gs2pi + (2 * (gs2pi / 60)); theta >= 0; theta -= gs2pi / 60) {
+			_camPath1.push() = GsPnt(radius * cosf(theta), 40.0f, radius * sinf(theta));
+		}
+		float deltat = _slider->value();
+		_curveCam1->begin_polyline();
+
+		for (float t = 2; t < _camPath1.size(); t += deltat) // note: the t range may change according to the curve
+		{
+			GsPnt x = eval_bspline(t, 3, _camPath1);
+			_curveCam1->push(x);
+		}
+
+		_curveCam1->end_polyline();
+		_curveCam1->swap_visibility();
+	
+}
+
 void MyViewer::run_propellors(bool on) {
 
 	//Code provided by Professor, using this for a consistent computation on any computers
@@ -788,7 +833,7 @@ void MyViewer::cameraMode(int mode) {
 	case 1: {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
-			double frdt = 1.0 / 30.0; //frames
+			double frdt = 1.0 / 60.0; //frames
 			int index = 0;
 			camera().init();
 			if (cMode == 1) {
@@ -843,6 +888,7 @@ void MyViewer::cameraMode(int mode) {
 			camera().up.y = 40.0f;
 		}
 		break;
+	
 	}
 	}
 
@@ -864,110 +910,131 @@ void MyViewer::computeShadow() {
 	sH->get().mult(tr, s);
 }
 
-void MyViewer::run_animation ()
+void MyViewer::run_animation()
 {
 	output("ANIMATING!");
 	//cameraMode(mode);
-	GsMat tr, rot, sca;
-	double time = 0, lt = 0, t0 = gs_time();
-	double frdt = 1.0 / 30; //frames
-	int i = i_heli;
-	int ii = i_plane;
-	int iii = i_rep;
-	cMode = 2;
-	//rot.roty(gspi/30);
-	do
-	{
-		while (time - lt < frdt) { ws_check(); time = gs_time() - t0; }
+	if (_animate1) {
+		double time = 0, lt = 0, t0 = gs_time();
+		double frdt = 1.0 / 30; //frames
+		int i = 0;
+		while (i < _curveCam1->V.size()) {
+			while (time - lt < frdt) { ws_check(); time = gs_time() - t0; }
 
-		lt = gs_time() - t0;		
-		
-		rotateX(baxis, -angle);
-		rotateX(saxis, -angle);
-
-		rotateY(_land[1], -gspi/700);
-
-		i = i_heli;
-		ii = i_plane;
-		iii = i_rep;
-
-		if (cMode <5) {
-			cameraMode(cMode);
+			camera().eye = _curveCam1->V[i];
+			camera().center = GsPnt(0,0,0);
+			camera().fovy = GS_TORAD(60);
+			camera().up.y = 40.0f;
+			render();
+			ws_check();
+			i++;
 		}
-		if (i < calcPoints.size() - 1) {
-			float x, y, z;
+		_animate1 = !_animate1;
+	}
 
-			x = calcPoints[i + 1].x;
-			y = calcPoints[i + 1].y;
-			z = calcPoints[i + 1].z;
+	if (_animating) {
+		GsMat tr, rot, sca;
+		double time = 0, lt = 0, t0 = gs_time();
+		double frdt = 1.0 / 60.0; //frames
+		int i = i_heli;
+		int ii = i_plane;
+		int iii = i_rep;
+		cMode = 2;
+		//rot.roty(gspi/30);
+		do
+		{
+			while (time - lt < frdt) { ws_check(); time = gs_time() - t0; }
 
-			float angle = atan2(x - calcPoints[i].x, z - calcPoints[i].z);
-			tr.translation(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z);
-			sca.scaling(0.15f);
+			lt = gs_time() - t0;
 
-			rot.roty(angle);
-			t->get() = tr * rot * tr.inverse() * tr * sca;
+			rotateX(baxis, -angle);
+			rotateX(saxis, -angle);
 
-			offset += calcPoints[i + 1].y - calcPoints[i].y;
-			i_heli++;
-		}
-		else i_heli = 0;
+			rotateY(_land[1], -gspi / 700);
 
-		mahPlane->run_animation(float(lt));
+			i = i_heli;
+			ii = i_plane;
+			iii = i_rep;
 
-		if (ii < planePath.size() - 1) {
+			if (cMode < 5) {
+				cameraMode(cMode);
+			}
+			if (i < calcPoints.size() - 1) {
+				float x, y, z;
 
-			float angley = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
-			//float anglez = atan2(planePath[ii+1].y - planePath[ii].y, planePath[ii+1].x - planePath[ii].x);
-			mahPlane->set_position(planePath[ii]);
-			mahPlane->setrotY(angley);
-			//mahPlane->setrotX(anglez);
-			
-			i_plane++;
-		}
-		else i_plane = 0;
+				x = calcPoints[i + 1].x;
+				y = calcPoints[i + 1].y;
+				z = calcPoints[i + 1].z;
 
-		if (iii < republicPath.size() - 1) {
+				float angle = atan2(x - calcPoints[i].x, z - calcPoints[i].z);
+				tr.translation(-calcPoints[i].x, calcPoints[i].y, -calcPoints[i].z);
+				sca.scaling(0.15f);
 
-			float angle = atan2(republicPath[iii].x - republicPath[iii + 1].x, republicPath[iii].z - republicPath[iii + 1].z);
+				rot.roty(angle);
+				t->get() = tr * rot * tr.inverse() * tr * sca;
 
-			Venator->set_position(republicPath[iii]);
-			Venator->setrotY(angle);
-			i_rep++;
-		}
-		else i_rep = 0;
+				offset += calcPoints[i + 1].y - calcPoints[i].y;
+				i_heli++;
+			}
+			else i_heli = 0;
 
-		if (randomColor) {
-			boat_model[0]->color(GsColor(i * 2, ii, iii * 2));
-			boat_model[1]->color(GsColor(i, ii * 3, iii * 5));
-			boat_model[2]->color(GsColor(i * 5, ii * 3, iii * 2));
-			boat_model[3]->color(GsColor(i * 2, ii * 6, iii * 2));
-			land_models[0]->color(GsColor(i * 2, ii * 2, iii * 3));
-		}
-		else {
-			boat_model[0]->color(GsColor(132, 132, 130));
-			boat_model[1]->color(GsColor(132, 132, 130));
-			boat_model[2]->color(GsColor(132, 132, 130));
-			boat_model[3]->color(GsColor(132, 132, 130));
-			land_models[0]->color(GsColor(0, 141, 199));
-		}
-		//computeShadow();
-		render();
+			mahPlane->run_animation(float(lt));
 
-	} while (_animating);
+			if (ii < planePath.size() - 1) {
+
+				float angley = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
+				//float anglez = atan2(planePath[ii+1].y - planePath[ii].y, planePath[ii+1].x - planePath[ii].x);
+				mahPlane->set_position(planePath[ii]);
+				mahPlane->setrotY(angley);
+				//mahPlane->setrotX(anglez);
+
+				i_plane++;
+			}
+			else i_plane = 0;
+
+			if (iii < republicPath.size() - 1) {
+
+				float angle = atan2(republicPath[iii].x - republicPath[iii + 1].x, republicPath[iii].z - republicPath[iii + 1].z);
+
+				Venator->set_position(republicPath[iii]);
+				Venator->setrotY(angle);
+				i_rep++;
+			}
+			else i_rep = 0;
+
+			if (randomColor) {
+				boat_model[0]->color(GsColor(i * 2, ii, iii * 2));
+				boat_model[1]->color(GsColor(i, ii * 3, iii * 5));
+				boat_model[2]->color(GsColor(i * 5, ii * 3, iii * 2));
+				boat_model[3]->color(GsColor(i * 2, ii * 6, iii * 2));
+				land_models[0]->color(GsColor(i * 2, ii * 2, iii * 3));
+			}
+			else {
+				boat_model[0]->color(GsColor(132, 132, 130));
+				boat_model[1]->color(GsColor(132, 132, 130));
+				boat_model[2]->color(GsColor(132, 132, 130));
+				boat_model[3]->color(GsColor(132, 132, 130));
+				land_models[0]->color(GsColor(0, 141, 199));
+			}
+			//computeShadow();
+			render();
+
+		} while (_animating);
 
 
-	boat_model[0]->color(GsColor(132, 132, 130));
-	boat_model[1]->color(GsColor(132, 132, 130));
-	boat_model[2]->color(GsColor(132, 132, 130));
-	boat_model[3]->color(GsColor(132, 132, 130));
-	land_models[0]->color(GsColor(0, 141, 199));
+		boat_model[0]->color(GsColor(132, 132, 130));
+		boat_model[1]->color(GsColor(132, 132, 130));
+		boat_model[2]->color(GsColor(132, 132, 130));
+		boat_model[3]->color(GsColor(132, 132, 130));
+		land_models[0]->color(GsColor(0, 141, 199));
 
-	i_heli = i_plane = i_rep = 0;
-	_animating = false;
-	options(-1);
+		i_heli = i_plane = i_rep = 0;
+		_animating = false;
+		options(-1);
 
-	mode = mode ? false : true;
+		mode = mode ? false : true;
+
+	}
 }
 
 int MyViewer::handle_keyboard(const GsEvent& e)
@@ -1186,7 +1253,10 @@ int MyViewer::uievent ( int e )
 {
 	switch ( e )
 	{
-	case EvAnimate: _animating = !_animating;
+	case EvAnimate: _animate1 = !_animate1;
+		run_animation(); options(0); return 1;
+
+	case EvAnimate2: _animating = !_animating;
 		//run_propellors(engine_on);
 		run_animation(); options(0); return 1;
 
