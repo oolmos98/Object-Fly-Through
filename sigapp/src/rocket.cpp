@@ -31,10 +31,10 @@ void Rocket::import_model() {
 	rocket->model()->smooth(true);
 	rocketClass->add(trocket = new SnTransform);
 
-	rocket->model()->scale(0.05f);
+	//rocket->model()->scale(0.25f); //0.05
 	GsMat rot, trans;
-	rot.rot(GsVec::i, gs2pi/4);
-	trans.translation(GsVec(0.0f, 15.0f, -15.0f));
+	//rot.rot(GsVec::i, gs2pi/4);
+	trans.translation(GsVec(0.0f, 5.0f, 0.0f)); //15,-15
 	trocket->get() = trans * rot * trans.inverse();
 
 	GsModel& material = *rocket->model();
@@ -52,4 +52,48 @@ void Rocket::import_model() {
 	rocketClass->add(trocket);
 	rocketClass->add(rocket, true);
 
+}
+
+void Rocket::set_position(GsVec pos) {
+	GsMat position, scaling, rot;
+	currPos = pos;
+	rot.rot(GsVec::i, gs2pi / 4);
+	scaling.scaling(currentScale);
+	position.translation(currPos);
+	trocket->get() = position * rot * rotX * rotY * rotZ * position.inverse() * position * scaling;
+}
+
+void Rocket::setScaling(float sca) {
+	GsMat scaling, position;
+	position.translation(currPos);
+	currentScale = sca;
+	scaling.scaling(currentScale);
+	trocket->get() = position * rotX * rotY * rotZ * position.inverse() * position * scaling;
+}
+
+void Rocket::setrotX(float X) {
+	GsMat scaling, position, rot;
+	position.translation(currPos);
+	rot.rot(GsVec::k, gs2pi / 4);
+	scaling.scaling(currentScale);
+	rotX.rotx(X);
+	trocket->get() = position * rot * rotX * rotY * rotZ * position.inverse() * position * scaling;
+}
+
+void Rocket::setrotY(float Y) {
+	GsMat scaling, position, rot;
+	position.translation(currPos);
+	rot.rot(GsVec::i, gs2pi / 4);
+	scaling.scaling(currentScale);
+	rotY.roty(Y);
+	trocket->get() = position * rot * rotX * rotY * rotZ * position.inverse() * position * scaling;
+}
+
+void Rocket::setrotZ(float Z) {
+	GsMat scaling, position, rot;
+	position.translation(currPos);
+	rot.rot(GsVec::k, gs2pi / 4);
+	scaling.scaling(currentScale);
+	rotZ.rotz(Z);
+	trocket->get() = position * rot * rotX * rotY * rotZ * position.inverse() * position * scaling;
 }

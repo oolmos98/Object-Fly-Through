@@ -29,6 +29,7 @@ class MyViewer : public WsViewer
 	SnLines* _curvePlane;
 	SnLines* _curveRepublic;
 	SnLines* _curveCam1;
+	SnLines* _curveRocket;
 
 	UiSlider* _slider;
 	GsArray<GsPnt> _points;
@@ -36,6 +37,7 @@ class MyViewer : public WsViewer
 	GsArray<GsPnt> _planePathPoints;
 	GsArray<GsPnt> _republicPathPoints;
 	GsArray<GsPnt> _camPath1;
+	GsArray<GsPnt> _rocketPathPoints;
 
 
 	SnMaterial* shMaterial;
@@ -55,7 +57,7 @@ class MyViewer : public WsViewer
 	// Misc
 	SnGroup* _pointPlacement;
 
-	int i_heli = 0, i_plane = 0, i_rep = 0;
+	int i_heli = 0, i_plane = 0, i_rep, i_rock = 0;
 
 	bool randomColor = false, _animate1 = false;
 	// Jeff's Plane

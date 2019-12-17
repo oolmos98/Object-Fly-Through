@@ -46,6 +46,6 @@ public:
 
 	void setScaling(float sca);
 	void run_animation(float time);
-	void updateShadows(GsVec shadowPos, GsMat trans, GsMat shadowMat, GsMat rot);
+	//void updateShadows(GsVec shadowPos, GsMat trans, GsMat shadowMat, GsMat rot);
 	int handle_keyboard(const GsEvent& e);
 };

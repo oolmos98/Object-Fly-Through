@@ -33,6 +33,7 @@ GsArray<GsPnt> calcPoints;
 GsArray<GsPnt> camPath;		// To be used for camera pathing
 GsArray<GsPnt> planePath;
 GsArray<GsPnt> republicPath;
+GsArray<GsPnt> rocketPath;
 
 //Not used
 //SnGroup* sun;
@@ -204,6 +205,8 @@ void MyViewer::import_models ()
 	rootg()->add_group(mahPlane->model(), true);
 
 	dahRocket = new Rocket();
+	dahRocket->setScaling(0.05f);
+	dahRocket->set_position(_rocketPathPoints[0]);
 	rootg()->add_group(dahRocket->model(), true);
 
 	
@@ -573,6 +576,7 @@ void MyViewer::compute_curves() {
 	rootg()->add(_curveCam = new SnLines);
 	rootg()->add(_curvePlane = new SnLines);
 	rootg()->add(_curveRepublic = new SnLines);
+	rootg()->add(_curveRocket = new SnLines);
 
 	_curve->color(GsColor(20, 200, 25));
 	_curve->line_width(3.0f);
@@ -585,11 +589,15 @@ void MyViewer::compute_curves() {
 
 	_curveRepublic->line_width(3.0f);
 	_curveRepublic->color(GsColor::red);
+
+	_curveRocket->line_width(3.0f);
+	_curveRocket->color(GsColor::orange);
 	
 	_curve->swap_visibility();
 	_curveCam->swap_visibility();
 	_curvePlane->swap_visibility();
 	_curveRepublic->swap_visibility();
+	//_curveRocket->swap_visibility();
 
 	float height = 15.5f;
 	_points.push() = position;
@@ -628,6 +636,44 @@ void MyViewer::compute_curves() {
 
 	_curve->end_polyline();
 	
+
+	/*
+		Rocket Path
+	*/
+	//float height = 15.5f;
+	_rocketPathPoints.push() = position;
+	_rocketPathPoints.push() = position;
+	_rocketPathPoints.push() = GsPnt(0, height, 0);
+	_rocketPathPoints.push() = GsPnt(0, height, 40);
+	_rocketPathPoints.push() = GsPnt(40, height, 35);
+	_rocketPathPoints.push() = GsPnt(40, height, 20);
+	_rocketPathPoints.push() = GsPnt(20, height, -20);
+	_rocketPathPoints.push() = GsPnt(0, height - 5, -20);
+	_rocketPathPoints.push() = GsPnt(-10, height - 5, -20);
+	_rocketPathPoints.push() = GsPnt(-30, height - 5, -50);
+	_rocketPathPoints.push() = GsPnt(-10, height - 5, -10);
+	_rocketPathPoints.push() = GsPnt(0, height - 5, 40);
+	_rocketPathPoints.push() = GsPnt(-10, height - 5, 30);
+	_rocketPathPoints.push() = GsPnt(0, height - 5, -5);
+	_rocketPathPoints.push() = GsPnt(0, height - 5, 0);
+	_rocketPathPoints.push() = GsPnt(0, 0, 0);
+	_rocketPathPoints.push() = GsPnt(0, 0, 0);
+
+	_curveRocket->init();
+
+	//float deltat = _slider->value();
+	_curveRocket->begin_polyline();
+
+	for (float t = 2; t < _rocketPathPoints.size(); t += deltat) // note: the t range may change according to the curve
+	{
+		GsPnt x = eval_bspline(t, 3, _rocketPathPoints);
+		_curveRocket->push(x);
+		rocketPath.push(x);
+	}
+
+	_curveRocket->end_polyline();
+
+
 	/*
 		Camera Pathing
 	*/
@@ -943,6 +989,7 @@ void MyViewer::run_animation()
 		int i = i_heli;
 		int ii = i_plane;
 		int iii = i_rep;
+		int iiii = i_rock;
 		cMode = 2;
 		//rot.roty(gspi/30);
 		do
@@ -959,6 +1006,7 @@ void MyViewer::run_animation()
 			i = i_heli;
 			ii = i_plane;
 			iii = i_rep;
+			iiii = i_rock;
 
 			if (cMode < 5) {
 				cameraMode(cMode);
@@ -1005,6 +1053,16 @@ void MyViewer::run_animation()
 				i_rep++;
 			}
 			else i_rep = 0;
+
+			if (iiii < rocketPath.size() - 1) {
+
+				float angle = atan2(rocketPath[iiii].x - rocketPath[iiii + 1].x, rocketPath[iiii].z - rocketPath[iiii + 1].z);
+
+				dahRocket->set_position(rocketPath[iiii]);
+				dahRocket->setrotY(angle);
+				i_rock++;
+			}
+			else i_rock = 0;
 
 			if (randomColor) {
 				boat_model[0]->color(GsColor(i * 2, ii, iii * 2));
