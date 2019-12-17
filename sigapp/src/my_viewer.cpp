@@ -933,8 +933,8 @@ void MyViewer::run_animation()
 			ws_check();
 			i++;
 		}
-		_animate1 = !_animate1;
 	}
+
 
 	if (_animating) {
 		GsMat tr, rot, sca;
@@ -1257,11 +1257,12 @@ int MyViewer::uievent ( int e )
 {
 	switch ( e )
 	{
-	case EvAnimate: _animate1 = !_animate1;
+	case EvAnimate: _animate1 = true;
 		run_animation(); options(0); return 1;
 
-	case EvAnimate2: _animating = !_animating;
-		//run_propellors(engine_on);
+	case EvAnimate2: 
+		_animate1 = false;
+		_animating = !_animating;
 		run_animation(); options(0); return 1;
 
 	case EvExit: gs_exit();
