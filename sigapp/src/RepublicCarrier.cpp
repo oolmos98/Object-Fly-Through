@@ -31,7 +31,7 @@ void RepublicCarrier::import_model() {
 	sceneTransform = new SnTransform;
 	//flapsGroup = new SnGroup;
 
-	if (carr->model()->load_obj("../model/venator2.obj"))
+	if (carr->model()->load("../model/venator2.obj"))
 		body->add(carr);
 
 	else gsout << "error" << gsnl;

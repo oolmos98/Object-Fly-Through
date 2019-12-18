@@ -43,6 +43,7 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 	_nbut = 0;
 	_animating = false;
 
+	rootg()->add(_scene = new SnTransform());
 	build_ui();
 	compute_curves();
 	computeAnimate1();
@@ -81,8 +82,8 @@ void MyViewer::build_ui ()
 	{	UiPanel* p=sp;
 		p->add ( _nbut=new UiCheckButton ( "Normals", EvNormals ) ); 
 	}*/
-	p->add(new UiButton("First Animation", EvAnimate));
-	p->add(new UiButton("Animate", EvAnimate2));
+	p->add(new UiButton("First Outer Cube Animation", EvAnimate));
+	p->add(new UiButton("Inner Cube Animation", EvAnimate2));
 	p->add ( new UiButton ( "Exit", EvExit ) ); p->top()->separate();
 
 	p->add(_slider = new UiSlider(" dt:", EvDeltaT, 0, 0, 150));
@@ -101,79 +102,79 @@ void MyViewer::build_ui ()
 	
 }
 void MyViewer::options(int c) {
-	switch (c) {
+	//switch (c) {
 
-	case 0: {
-		output("Hello there human:) \nPressing Keys:\n\
-			'q' = Rotate Main Propellor Counter-clockwise\n\
-			'a' = Rotate Main Propellor Clockwise\n\
-			'w' = Rotate Tail Propellor Counter-clockwise\n\
-			's' = Rotate Tail Propellor Clockwise\n\
-			'z' = Scale Up\n\
-			'x' = Scale Down\n\
-			'SPACE' = Change Camera View\n\n\
-			'ENTER' = Turn On Helicopter, must be on to control\n\
-			'm' = Translate Up/Down or Move forward/backwards (Helicopter)\n\
-			'c' = Helicopter or Carrier\n\
-			'Up' = Translate Up or Move Forward\n\
-			'Down' = Translate Down or Move Back\n\
-			'Left' = Change Direction\n\
-			'Right' = Change Direction");
-		//output_pos(20, 70);
-		break;
-	}
-	case 1: {
-		output("Turn On Helictopter!");
-		break;
-	}
-	case 2: {
-		if(engine_on)
-		output("Helicopter is now on!");
-		else output("Helicopter is now off!");
+	//case 0: {
+	//	output("Hello there human:) \nPressing Keys:\n\
+	//		'q' = Rotate Main Propellor Counter-clockwise\n\
+	//		'a' = Rotate Main Propellor Clockwise\n\
+	//		'w' = Rotate Tail Propellor Counter-clockwise\n\
+	//		's' = Rotate Tail Propellor Clockwise\n\
+	//		'z' = Scale Up\n\
+	//		'x' = Scale Down\n\
+	//		'SPACE' = Change Camera View\n\n\
+	//		'ENTER' = Turn On Helicopter, must be on to control\n\
+	//		'm' = Translate Up/Down or Move forward/backwards (Helicopter)\n\
+	//		'c' = Helicopter or Carrier\n\
+	//		'Up' = Translate Up or Move Forward\n\
+	//		'Down' = Translate Down or Move Back\n\
+	//		'Left' = Change Direction\n\
+	//		'Right' = Change Direction");
+	//	//output_pos(20, 70);
+	//	break;
+	//}
+	//case 1: {
+	//	output("Turn On Helictopter!");
+	//	break;
+	//}
+	//case 2: {
+	//	if(engine_on)
+	//	output("Helicopter is now on!");
+	//	else output("Helicopter is now off!");
 
-		break;
-	}
-	case 4: {
-		output("Cant go any lower becasause realism!");
-		break;
-	}
-	case 5: {
-		output("Changed Camera!");
-		break;
-	}
-	case 6: {
-		output("Moving!");
-		break;
-	}
-	case 7: {
-		output("Rotating!");
-		break;
-	}
-	case 8: {
-		output("Scaling!");
-		break;
-	}
-	case 9: {
-		output("Changed Mode!");
-		break;
-	}
-	case 10: {
-		output("Changed Object!");
-		break;
-	}
-	}
-	char* m,* o,* e;
-	if (engine_on) e = "ON";
-	else e = "OFF";
+	//	break;
+	//}
+	//case 4: {
+	//	output("Cant go any lower becasause realism!");
+	//	break;
+	//}
+	//case 5: {
+	//	output("Changed Camera!");
+	//	break;
+	//}
+	//case 6: {
+	//	output("Moving!");
+	//	break;
+	//}
+	//case 7: {
+	//	output("Rotating!");
+	//	break;
+	//}
+	//case 8: {
+	//	output("Scaling!");
+	//	break;
+	//}
+	//case 9: {
+	//	output("Changed Mode!");
+	//	break;
+	//}
+	//case 10: {
+	//	output("Changed Object!");
+	//	break;
+	//}
+	//}
+	//char* m,* o,* e;
+	//if (engine_on) e = "ON";
+	//else e = "OFF";
 
-	if (object == 0) o = "HELICOPTER";
-	else o = "CARRIER";
-	if (!mode) m = "UP or DOWN";
-	else m = "FORWARD or BACK";
-	message().setf("Current Values:\t\
-					Mode: %s\t\
-					Object: %s\t\
-					Engine: %s",m,o,e);
+	//if (object == 0) o = "HELICOPTER";
+	//else o = "CARRIER";
+	//if (!mode) m = "UP or DOWN";
+	//else m = "FORWARD or BACK";
+	//message().setf("Current Values:\t\
+	//				Mode: %s\t\
+	//				Object: %s\t\
+	//				Engine: %s",m,o,e);
 }
 
 
@@ -204,16 +205,16 @@ void MyViewer::import_models ()
 	mahPlane->set_position(_planePathPoints[2]);
 	rootg()->add_group(mahPlane->model(), true);
 
-	dahRocket = new Rocket();
+	/*dahRocket = new Rocket();
 	dahRocket->setScaling(0.05f);
 	dahRocket->set_position(_rocketPathPoints[0]);
-	rootg()->add_group(dahRocket->model(), true);
+	rootg()->add_group(dahRocket->model(), true);*/
 
 	
 	Venator = new RepublicCarrier();
-	Venator->setScaling(1.5f);
+	Venator->setScaling(0.5f);
 	//Venator->setrotY(gspi);
-	Venator->set_position(_republicPathPoints[0]);
+	Venator->set_position(_republicPathPoints[1]);
 	rootg()->add_group(Venator->model(), true);
 
 
@@ -223,12 +224,7 @@ void MyViewer::import_models ()
 
 	rootg()->add_group(bucket->model(), true);
 
-	/*deathstar = new DeathStar();
-	deathstar->set_position(GsVec(0, 100, -50));
-	deathstar->setScaling(2.0f);
-
-	rootg()->add_group(deathstar->model(), true);*/
-
+	
 	cube = new Cube();
 	//Cube->set_position(GsVec(0, 100, -50));
 	//Cube->setScaling(2.0f);
@@ -597,7 +593,7 @@ void MyViewer::compute_curves() {
 	_curveCam->swap_visibility();
 	_curvePlane->swap_visibility();
 	_curveRepublic->swap_visibility();
-	//_curveRocket->swap_visibility();
+	_curveRocket->swap_visibility();
 
 	float height = 15.5f;
 	_points.push() = position;
@@ -641,10 +637,11 @@ void MyViewer::compute_curves() {
 		Rocket Path
 	*/
 	//float height = 15.5f;
-	_rocketPathPoints.push() = position;
-	_rocketPathPoints.push() = position;
-	_rocketPathPoints.push() = GsPnt(0, height, 0);
-	_rocketPathPoints.push() = GsPnt(0, height, 40);
+	/*_rocketPathPoints.push() = GsPnt(30, -2.5f, 30);
+	_rocketPathPoints.push() = GsPnt(30, -2.5f, 30);
+	_rocketPathPoints.push() = GsPnt(30, -2.5f, 30);
+	_rocketPathPoints.push() = GsPnt(60, height, 50);
+	_rocketPathPoints.push() = GsPnt(70, height, 80);
 	_rocketPathPoints.push() = GsPnt(40, height, 35);
 	_rocketPathPoints.push() = GsPnt(40, height, 20);
 	_rocketPathPoints.push() = GsPnt(20, height, -20);
@@ -653,25 +650,21 @@ void MyViewer::compute_curves() {
 	_rocketPathPoints.push() = GsPnt(-30, height - 5, -50);
 	_rocketPathPoints.push() = GsPnt(-10, height - 5, -10);
 	_rocketPathPoints.push() = GsPnt(0, height - 5, 40);
-	_rocketPathPoints.push() = GsPnt(-10, height - 5, 30);
-	_rocketPathPoints.push() = GsPnt(0, height - 5, -5);
-	_rocketPathPoints.push() = GsPnt(0, height - 5, 0);
-	_rocketPathPoints.push() = GsPnt(0, 0, 0);
-	_rocketPathPoints.push() = GsPnt(0, 0, 0);
+	_rocketPathPoints.push() = GsPnt(-10, height - 5, 30);*/
+	
+	//_curveRocket->init();
 
-	_curveRocket->init();
+	////float deltat = _slider->value();
+	//_curveRocket->begin_polyline();
 
-	//float deltat = _slider->value();
-	_curveRocket->begin_polyline();
+	//for (float t = 2; t < _rocketPathPoints.size(); t += deltat) // note: the t range may change according to the curve
+	//{
+	//	GsPnt x = eval_bspline(t, 3, _rocketPathPoints);
+	//	_curveRocket->push(x);
+	//	rocketPath.push(x);
+	//}
 
-	for (float t = 2; t < _rocketPathPoints.size(); t += deltat) // note: the t range may change according to the curve
-	{
-		GsPnt x = eval_bspline(t, 3, _rocketPathPoints);
-		_curveRocket->push(x);
-		rocketPath.push(x);
-	}
-
-	_curveRocket->end_polyline();
+	//_curveRocket->end_polyline();
 
 
 	/*
@@ -760,13 +753,14 @@ void MyViewer::showPoints(GsArray<GsPnt> P) {
 void MyViewer::computeAnimate1() {
 
 		rootg()->add(_curveCam1 = new SnLines);
-		_curveCam1->line_width(20.0f);
+		_curveCam1->line_width(2.0f);
 		_curveCam1->color(GsColor::cyan);
 
+		_camPath1.push(GsPnt(600, 600, 600));
+		_camPath1.push(GsPnt(600, 600, 600));
+		_camPath1.push(GsPnt(550, 550, 550));
 		_camPath1.push(GsPnt(500, 500, 500));
 		_camPath1.push(GsPnt(450, 450, 450));
-
-
 		_camPath1.push(GsPnt(400, 400, 250));
 
 		_camPath1.push(GsPnt(250, 250, 250));
@@ -869,7 +863,7 @@ void MyViewer::cameraMode(int mode) {
 	switch (mode) {
 		
 	case 0: {
-		
+	//	camera().init();
 		camera().eye.z = 40.0f;
 		camera().eye.y = 40.0f;
 		//camera().up.z = -2.0f;
@@ -877,13 +871,12 @@ void MyViewer::cameraMode(int mode) {
 		camera().center;
 		camera().fovy = GS_TORAD(60);
 		render();
-		ws_check();
 		break;
 	}
 	case 1: {
 			//Code for time part provided by Professor
 			double t = 0, lt = 0, t0 = gs_time(); 
-			double frdt = 1.0 / 60.0; //frames
+			double frdt = 1.0 / 30.0; //frames
 			int index = 0;
 			camera().init();
 			if (cMode == 1) {
@@ -901,7 +894,8 @@ void MyViewer::cameraMode(int mode) {
 					if (index < camPath.size()) {
 						camera().eye = camPath[index];
 						camera().center;
-						camera().fovy = GS_TORAD(100);
+						camera().up;
+						camera().fovy = GS_TORAD(84);
 					}
 					index++;
 					message().setf("local time = % f", lt);
@@ -917,7 +911,7 @@ void MyViewer::cameraMode(int mode) {
 			camera().eye = calcPoints[i_heli] + GsPnt(5, 15, -20);
 			camera().center = calcPoints[i_heli];
 			camera().fovy = GS_TORAD(60);
-			camera().up.y = 40.0f;
+			camera().up;
 		}
 		break;
 	}
@@ -926,7 +920,7 @@ void MyViewer::cameraMode(int mode) {
 			camera().eye = planePath[i_plane] + GsPnt(10, 15, 10);
 			camera().center = planePath[i_plane];
 			camera().fovy = GS_TORAD(60);
-			camera().up.y = 40.0f;
+			camera().up;
 		}
 		break;
 	}
@@ -935,7 +929,7 @@ void MyViewer::cameraMode(int mode) {
 			camera().eye = republicPath[i_rep] + GsPnt(15, 25, 15);
 			camera().center = republicPath[i_rep];
 			camera().fovy = GS_TORAD(60);
-			camera().up.y = 40.0f;
+			camera().up;
 		}
 		break;
 	
@@ -985,7 +979,7 @@ void MyViewer::run_animation()
 	if (_animating) {
 		GsMat tr, rot, sca;
 		double time = 0, lt = 0, t0 = gs_time();
-		double frdt = 1.0 / 60.0; //frames
+		double frdt = 1.0 / 30.0; //frames
 		int i = i_heli;
 		int ii = i_plane;
 		int iii = i_rep;
@@ -1054,15 +1048,15 @@ void MyViewer::run_animation()
 			}
 			else i_rep = 0;
 
-			if (iiii < rocketPath.size() - 1) {
+			/*if (iiii < rocketPath.size() - 1) {
 
-				float angle = atan2(rocketPath[iiii].x - rocketPath[iiii + 1].x, rocketPath[iiii].z - rocketPath[iiii + 1].z);
+				float angley = atan2(planePath[iiii].x - planePath[iiii + 1].x, planePath[iiii].z - planePath[iiii + 1].z);
 
 				dahRocket->set_position(rocketPath[iiii]);
-				dahRocket->setrotY(angle);
+				dahRocket->setrotZ(angle);
 				i_rock++;
 			}
-			else i_rock = 0;
+			else i_rock = 0;*/
 
 			if (randomColor) {
 				boat_model[0]->color(GsColor(i * 2, ii, iii * 2));
@@ -1291,11 +1285,24 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		_curveCam->swap_visibility();
 		_curvePlane->swap_visibility();
 		_curveRepublic->swap_visibility();
+		//_curveRocket->swap_visibility();
+		_curveCam1->swap_visibility();
+
 		break;
 	}
 	case 'r': {
 		randomColor = !randomColor;
 		break;
+	}
+	case '1': {
+		_animate1 = true;
+		_animating = false;
+		run_animation(); options(0); return 1;
+	}
+	case '2': {
+		_animate1 = false;
+		_animating = !_animating;
+		run_animation(); options(0); return 1;
 	}
 
 	default:
@@ -1316,6 +1323,7 @@ int MyViewer::uievent ( int e )
 	switch ( e )
 	{
 	case EvAnimate: _animate1 = true;
+		_animating = false;
 		run_animation(); options(0); return 1;
 
 	case EvAnimate2: 

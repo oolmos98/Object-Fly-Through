@@ -29,7 +29,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\bomb.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
-    <ClCompile Include="..\src\Death_Star.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Bucket.cpp" />
     <ClCompile Include="..\src\my_viewer.cpp" />
@@ -41,7 +40,6 @@
     <ClInclude Include="..\src\bomb.h" />
     <ClInclude Include="..\src\Bucket.h" />
     <ClInclude Include="..\src\Cube.h" />
-    <ClInclude Include="..\src\Death_Star.h" />
     <ClInclude Include="..\src\my_viewer.h" />
     <ClInclude Include="..\src\Plane.h" />
     <ClInclude Include="..\src\RepublicCarrier.h" />

@@ -146,12 +146,19 @@ void Cube::import_model() {
 		m.F.push() = GsModel::Face(2, 1, 0);
 		m.F.push() = GsModel::Face(4, 3, 2);
 
+		/*m.N.push() = (GsVec(0, -10, 0));
 		m.N.push() = (GsVec(0, -10, 0));
 		m.N.push() = (GsVec(0, -10, 0));
 		m.N.push() = (GsVec(0, -10, 0));
 		m.N.push() = (GsVec(0, -10, 0));
-		m.N.push() = (GsVec(0, -10, 0));
-		m.N.push() = (GsVec(0, -10, 0));
+		m.N.push() = (GsVec(0, -10, 0));*/
+		m.N.push() = GsVec(-x, -h, -x);
+		m.N.push() = GsVec(-x, -h, x);
+		m.N.push() = GsVec(x, -h, -x);
+		m.N.push() = GsVec(-x, -h, x);
+		m.N.push() = GsVec(x, -h, x);
+		m.N.push() = GsVec(x, -h, -x);
+
 		//Textures, code given by Professor
 		m.T.push() = GsVec2(0.0f, 1.0f);
 		m.T.push() = GsVec2(0.0f, 0.0f);
@@ -165,9 +172,9 @@ void Cube::import_model() {
 		g.fi = 0;
 		g.fn = m.F.size();
 		g.dmap = new GsModel::Texture;
-		g.dmap->fname.set("../textures/faceBottom.jpg");
+		g.dmap->fname.set("../textures/faceBottom Alt.jpg");
 		m.M.push().init();
-		m.M.top() = GsMaterial::DefaultEmission;
+		m.M.top() = GsMaterial();
 		m.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 		m.textured = true;
 	}

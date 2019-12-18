@@ -12,7 +12,6 @@
 # include "Plane.h"
 # include "RepublicCarrier.h"
 # include "Bucket.h"
-# include "Death_Star.h"
 # include "Cube.h"
 # include "rocket.h"
 
@@ -21,7 +20,7 @@ class MyViewer : public WsViewer
 {  protected :
 	SnGroup* heli, * small_p, * big_p, * carrier, * land, * boats;
 	//SnGroup* shadowHeli;
-	SnTransform* body, * c, * p, * entire, * bprop, * baxis, * saxis, * sprop, * t, * sH, * h, * _land[2], * _boat;
+	SnTransform* body, * c, * p, * entire, * bprop, * baxis, * saxis, * sprop, * t, * sH, * h, * _land[2], * _boat,*_scene;
 	SnLines* l;
 	SnPolyEditor* _polyed;
 	SnLines* _curve;
@@ -68,7 +67,6 @@ class MyViewer : public WsViewer
 	RepublicCarrier* Venator;
 
 	Bucket* bucket;
-	DeathStar* deathstar;
 	Cube* cube;
 
    public :
