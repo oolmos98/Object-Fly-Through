@@ -30,7 +30,7 @@ void Bomb::import_model() {
 	bombModel->model()->smooth(true);
 	rotate.rotz(gspi / 2);
 	bombModel->model()->rotate(GsQuat(rotate));
-	//bombModel->color(GsColor::darkgreen);
+	bombModel->color(GsColor::darkgreen);
 	bombs->add(bombT);
 	bombs->add(bombModel);
 
@@ -59,7 +59,7 @@ void Bomb::dropBomb() {
 		pos.translation(bombDroppedLoc);
 		scale.scaling(bombScale);
 		bombT->get() = pos * scale;
-		if (bombDroppedLoc.y <= -5.0f) {
+		if (bombDroppedLoc.y <= -6.0f) {
 			bombExplode = true;
 			Explode();
 		}
@@ -82,8 +82,8 @@ void Bomb::setPosition(GsVec pos) {
 void Bomb::Explode() {
 	
 	GsMat pos, scale;
-	if (explosionScale < 10.0f) {
-		pos.translation(GsVec(bombDroppedLoc.x, 0.0f, bombDroppedLoc.z));
+	if (explosionScale < 15.0f) {
+		pos.translation(GsVec(bombDroppedLoc.x, -6.0f, bombDroppedLoc.z));
 		explosionScale += 0.1f;
 		scale.scaling(explosionScale);
 		explosionT->get() = pos * scale;

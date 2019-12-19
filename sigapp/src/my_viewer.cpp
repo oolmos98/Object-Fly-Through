@@ -207,7 +207,7 @@ void MyViewer::import_models ()
 
 	// Jeff's Bomb
 	dahBomb = new Bomb();
-	dahBomb->setScale(0.70f);
+	dahBomb->setScale(1.00f);
 	dahBomb->setPosition(GsVec(0.0f, -20.0f, 0.0f));
 	rootg()->add_group(dahBomb->model(), true);
 
@@ -914,8 +914,13 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 2: {
-		if (i_heli < calcPoints.size()) {
-			camera().eye = calcPoints[i_heli] + GsPnt(5, 15, -20);
+		if (i_heli < calcPoints.size()-1) {
+			float r = 10.0f;
+			float angley = -atan2(calcPoints[i_heli + 1].x - calcPoints[i_heli].x, calcPoints[i_heli + 1].z - calcPoints[i_heli].z) - (gspi / 2);
+			GsPnt pos = calcPoints[i_heli] + GsPnt(r * cosf(angley), 15.0f, r * sinf(angley) - 7.0f);
+
+			//camera().eye = calcPoints[i_heli] + GsPnt(5, 15, -20);
+			camera().eye = pos;
 			camera().center = calcPoints[i_heli];
 			camera().fovy = GS_TORAD(60);
 			camera().up;
@@ -923,8 +928,13 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 3: {
-		if (i_plane < planePath.size()) {
-			camera().eye = planePath[i_plane] + GsPnt(10, 15, 10);
+		if (i_plane < planePath.size()-1) {
+
+			float r = 10.0f;
+			float angley = -atan2(planePath[i_plane].x - planePath[i_plane + 1].x, planePath[i_plane].z - planePath[i_plane + 1].z) + (gspi/2);
+			GsPnt pos = planePath[i_plane] + GsPnt(r * cosf(angley), 10.0f, r * sinf(angley) + 1.0f);
+			//camera().eye = planePath[i_plane] + GsPnt(10, 15, 10);
+			camera().eye = pos;
 			camera().center = planePath[i_plane];
 			camera().fovy = GS_TORAD(60);
 			camera().up;
@@ -932,8 +942,14 @@ void MyViewer::cameraMode(int mode) {
 		break;
 	}
 	case 4: {
-		if (i_rep < republicPath.size()) {
-			camera().eye = republicPath[i_rep] + GsPnt(15, 25, 15);
+		if (i_rep < republicPath.size()-1) {
+
+			float r = 10.0f;
+			float angley = -atan2(republicPath[i_rep].x - republicPath[i_rep + 1].x, republicPath[i_rep].z - republicPath[i_rep + 1].z) + (gspi / 2);
+			GsPnt pos = republicPath[i_rep] + GsPnt(r * cosf(angley), 10.0f, r * sinf(angley) + 5.0f);
+
+			//camera().eye = republicPath[i_rep] + GsPnt(15, 25, 15);
+			camera().eye = pos;
 			camera().center = republicPath[i_rep];
 			camera().fovy = GS_TORAD(60);
 			camera().up;
@@ -1039,7 +1055,7 @@ void MyViewer::run_animation()
 				float angley = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
 			
 				mahPlane->set_position(planePath[ii]);
-				gsout << angley << gsnl;
+				//gsout << angley << gsnl;
 				mahPlane->setrotY(angley);
 
 				i_plane++;

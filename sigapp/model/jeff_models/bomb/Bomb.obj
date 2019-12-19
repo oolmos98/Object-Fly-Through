@@ -1,6 +1,6 @@
 # Blender v2.77 (sub 0) OBJ File: 'Bomb_Export.blend'
 # www.blender.org
-mtllib Bomb.mtl
+mtllib ../model/jeff_models/bomb/Bomb.mtl
 o Bomb
 v -0.007354 0.140278 0.001284
 v 0.002329 0.141891 0.002210
