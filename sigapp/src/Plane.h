@@ -118,6 +118,9 @@ protected:
 	float currentScale;
 
 	bool _animating;
+
+	float lastY = 0.0f;
+
 public:
 	Plane();
 	Plane(float model_scale);

@@ -205,6 +205,12 @@ void MyViewer::import_models ()
 	mahPlane->set_position(_planePathPoints[2]);
 	rootg()->add_group(mahPlane->model(), true);
 
+	// Jeff's Bomb
+	dahBomb = new Bomb();
+	dahBomb->setScale(0.70f);
+	dahBomb->setPosition(GsVec(0.0f, -20.0f, 0.0f));
+	rootg()->add_group(dahBomb->model(), true);
+
 	/*dahRocket = new Rocket();
 	dahRocket->setScaling(0.05f);
 	dahRocket->set_position(_rocketPathPoints[0]);
@@ -699,10 +705,11 @@ void MyViewer::compute_curves() {
 	*/
 	float radius = 50.0f;
 	float h = 20.0f;
-	for (float theta = gs2pi + (2 * (gs2pi / 10)); theta >= 0; theta -= gs2pi / 10) {
+	for (float theta = gs2pi + (2 * (gs2pi / 15)); theta >= 0; theta -= gs2pi / 15) {
+		radius += radius > 50.0f ? -8.0f : 8.0f;
 		_planePathPoints.push() = GsPnt(radius * cosf(theta), h, radius * sinf(theta));
 		h += h > 20.0f ? -5.0f : 5.0f;
-
+		
 	}
 	radius = 65.0f;
 	for (float theta = gs2pi + (2 * (gs2pi / 60)); theta >= 0; theta -= gs2pi / 60) {
@@ -1028,15 +1035,18 @@ void MyViewer::run_animation()
 
 			if (ii < planePath.size() - 1) {
 
+
 				float angley = atan2(planePath[ii].x - planePath[ii + 1].x, planePath[ii].z - planePath[ii + 1].z);
-				//float anglez = atan2(planePath[ii+1].y - planePath[ii].y, planePath[ii+1].x - planePath[ii].x);
+			
 				mahPlane->set_position(planePath[ii]);
+				gsout << angley << gsnl;
 				mahPlane->setrotY(angley);
-				//mahPlane->setrotX(anglez);
 
 				i_plane++;
 			}
 			else i_plane = 0;
+
+			dahBomb->dropBomb();
 
 			if (iii < republicPath.size() - 1) {
 
@@ -1303,6 +1313,16 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		_animate1 = false;
 		_animating = !_animating;
 		run_animation(); options(0); return 1;
+	}
+	case 'l': {
+		//_animating = !_animating;
+		
+		if (!dahBomb->bombDropped) {
+			dahBomb->bombDroppedLoc = planePath[i_plane];
+			dahBomb->bombDropped = true;
+		}
+			//run_animation();
+		return 1;
 	}
 
 	default:

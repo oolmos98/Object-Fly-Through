@@ -14,6 +14,7 @@
 # include "Bucket.h"
 # include "Cube.h"
 # include "rocket.h"
+# include "bomb.h"
 
 // Viewer for this example:
 class MyViewer : public WsViewer
@@ -61,7 +62,9 @@ class MyViewer : public WsViewer
 	bool randomColor = false, _animate1 = false;
 	// Jeff's Plane
 	Plane* mahPlane;
+	Bomb* dahBomb;
 
+	// Alan's Rocket
 	Rocket* dahRocket;
 
 	RepublicCarrier* Venator;

@@ -250,7 +250,7 @@ void Plane::run_animation(float time) {
 		GsVec origin = GsVec(0.0f, 1.0f, 1.0f);
 		GsMat translations;
 		GsMat ptrans, prot;
-		prot.rotz(gs2pi*time);
+		prot.rotz(2*gs2pi*time);
 		ptrans.translation(GsVec(0.0f, 0.85f, -7.5f));
 		prop_trans->get() = ptrans * prot;
 		propShadow->get() = ptrans * prot;
@@ -446,6 +446,60 @@ void Plane::setrotY(float Y) {
 	scaling.scaling(currentScale);
 	rotY.roty(Y);
 	sceneTransform->get() = position * rotX * rotY * rotZ * position.inverse() * position * scaling;
+
+	if ((Y - lastY) < 0.0f) {
+		if (flapangle < MAX_ANGLE_ALLOWED) {
+			flapangle++;
+			GsVec A1 = (GsPnt(1.9f, 0.7f, 0.85f) - GsPnt(8.2f, 0.7f, 0.40f));
+			GsQuat rotQA1(A1, gs2pi / 200);
+			flaps[0]->model()->rotate(rotQA1);
+			GsVec B1 = (GsPnt(-1.9f, 0.7f, 0.85f) - GsPnt(-8.2f, 0.7f, 0.40f));
+			GsQuat rotQB1(B1, gs2pi / 200);
+			flaps[1]->model()->rotate(rotQB1);
+		}
+
+		if (currentang > -(MAX_ANGLE_ALLOWED)) {
+			currentang--;
+			rotZ.rotz((gs2pi / 400) * currentang);
+			sceneTransform->get() = position * rotX * rotY * rotZ * position.inverse() * position * scaling;
+		}
+
+		if (r_angle > -MAX_ANGLE_ALLOWED) {
+			currentang--;
+			r_angle--;
+			GsVec A = (GsPnt(0.0f, 3.1f, 5.3f) - GsPnt(0.0f, 1.6f, 5.3f));
+			GsQuat rotR(A, gs2pi / 120);
+			rudder->model()->rotate(rotR);
+		}
+	}
+	else {
+		if (flapangle > -MAX_ANGLE_ALLOWED) {
+			flapangle--;
+			GsVec A1 = (GsPnt(1.9f, 0.7f, 0.85f) - GsPnt(8.2f, 0.7f, 0.40f));
+			GsQuat rotQA1(A1, -gs2pi / 200);
+			flaps[0]->model()->rotate(rotQA1);
+			GsVec B1 = (GsPnt(-1.9f, 0.7f, 0.85f) - GsPnt(-8.2f, 0.7f, 0.40f));
+			GsQuat rotQB1(B1, -gs2pi / 200);
+			flaps[1]->model()->rotate(rotQB1);
+		}
+
+		if (currentang < (MAX_ANGLE_ALLOWED)) {
+			currentang++;
+			rotZ.rotz((gs2pi / 400) * currentang);
+			sceneTransform->get() = position * rotX * rotY * rotZ * position.inverse() * position * scaling;
+		}
+
+		if (r_angle < MAX_ANGLE_ALLOWED) {
+			r_angle++;
+			currentang++;
+			GsVec A = (GsPnt(0.0f, 3.1f, 5.3f) - GsPnt(0.0f, 1.6f, 5.3f));
+			GsQuat rotR(A, -gs2pi / 120);
+			rudder->model()->rotate(rotR);
+		}
+		
+	}
+
+	lastY = Y;
 }
 
 void Plane::setrotZ(float Z) {
