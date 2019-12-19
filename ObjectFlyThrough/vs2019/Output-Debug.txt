@@ -1,0 +1,84 @@
+﻿'sigapp64mt.exe' (Win32): Loaded 'C:\Users\jeffr\Documents\GitHub\CSE170Project2\sigapp\vs2019\obj\sigapp_Release_x64_v142\sigapp64mt.exe'. Symbols loaded.
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\ntdll.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\kernel32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\KernelBase.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\user32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\win32u.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\gdi32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\opengl32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\gdi32full.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\msvcrt.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\msvcp_win.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\advapi32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\ucrtbase.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\sechost.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\comdlg32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\rpcrt4.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\combase.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\combase.dll'. 
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\combase.dll'
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\bcryptprimitives.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\SHCore.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\glu32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\shlwapi.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\shell32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\DXCore.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\cfgmgr32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\cfgmgr32.dll'. 
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\cfgmgr32.dll'
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.18362.535_none_2a26181e466b3888\comctl32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\windows.storage.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\profapi.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\powrprof.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\umpdc.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\kernel.appcore.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\cryptsp.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\imm32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\uxtheme.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\msctf.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\oleaut32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Program Files (x86)\RivaTuner Statistics Server\RTSSHooks64.dll'. Module was built without symbols.
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\winmm.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\winmmbase.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\winmmbase.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\winmmbase.dll'. 
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\winmmbase.dll'
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\winmmbase.dll'
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_77e6900053c33f6f\nvoglv64.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\setupapi.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\bcrypt.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\ole32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\wtsapi32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\version.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\devobj.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\wintrust.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\msasn1.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\crypt32.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\ntmarta.dll'. 
+The thread 0x4ab8 has exited with code 0 (0x0).
+The thread 0x5044 has exited with code 0 (0x0).
+The thread 0x442c has exited with code 0 (0x0).
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\dwmapi.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\nvspcap64.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\TextInputFramework.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\CoreUIComponents.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\CoreMessaging.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\WinTypes.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\WinTypes.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\WinTypes.dll'. 
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\WinTypes.dll'
+'sigapp64mt.exe' (Win32): Unloaded 'C:\Windows\System32\WinTypes.dll'
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\iertutil.dll'. 
+'sigapp64mt.exe' (Win32): Loaded 'C:\Windows\System32\winsta.dll'. 
+The thread 0x24c0 has exited with code 1 (0x1).
+The thread 0x34bc has exited with code 1 (0x1).
+The thread 0x6744 has exited with code 1 (0x1).
+The thread 0x6240 has exited with code 1 (0x1).
+The thread 0x6d4 has exited with code 1 (0x1).
+The thread 0x6f68 has exited with code 1 (0x1).
+The thread 0x4e64 has exited with code 1 (0x1).
+The thread 0x63f0 has exited with code 1 (0x1).
+The thread 0x4420 has exited with code 1 (0x1).
+The thread 0x252c has exited with code 1 (0x1).
+The thread 0x98c has exited with code 1 (0x1).
+The program '[28312] sigapp64mt.exe' has exited with code 1 (0x1).
