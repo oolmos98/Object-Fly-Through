@@ -1,0 +1,30 @@
+# Visual Studio local files
+.vs/
+obj/
+*.pch
+*.user
+*.pdb
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.o
+*.obj
+
+# Compiled libraries
+*.a
+*.so
+*.lib
+*.dll
+
+# Executables
+*.x
+*.out
+*.exe
+
+# Doc local files
+*.tps
+
+# Local tests
+vs2017glfw/
