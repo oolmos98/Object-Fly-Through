@@ -112,8 +112,8 @@ void Cube::import_model() {
 		g.dmap = new GsModel::Texture;
 		g.dmap->fname.set("../textures/faceBottom.jpg");
 		m.M.push().init();
-		m.M.top() = GsMaterial::DefaultEmission;
-		m.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+		m.M.top() = GsMaterial::DefaultSpecular;
+		m.set_mode(GsModel::Hybrid, GsModel::PerGroupMtl);
 		m.textured = true;
 	}
 	face->add(carr[0]);

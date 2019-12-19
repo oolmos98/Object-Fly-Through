@@ -61,7 +61,7 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 	light(3).position = GsVec(0, -80, -60);
 
 	render();*/
-
+	//light().specular = GsColor(255, 255, 255);
 }
 
 static void my_polyed_callback(SnPolyEditor* pe, enum SnPolyEditor::Event e, int pid)
